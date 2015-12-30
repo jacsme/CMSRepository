@@ -1,0 +1,20 @@
+/*
+	Label Title
+*****************/
+#label-title {
+	background: #42BB48;	
+	
+	/*Applying CSS3 gradient
+    background: -moz-linear-gradient(center top , #FFFFFF,  #C6DEFF 1px, #C2DFFF 6px);    
+    background: -webkit-gradient(linear, left top, left 20, from(#FFFFFF), color-stop(5%, #EEEEEE) to(#FFFFFF));
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FBFBFB', endColorstr='#FFFFFF');
+	*/
+	margin-bottom: 2em;
+	overflow: hidden;
+	padding: 20px 20px;
+	width: 720px;
+ 
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}

@@ -1,0 +1,255 @@
+body 
+{
+background-image:url('../img/bg.jpg');
+background-color:#99b2bb;
+background-repeat:repeat-x;
+background-attachment:fixed;
+
+color:#464646;
+font-family:Arial, MS Sans Serif, Verdana;
+font-size:12px;
+}
+
+.content-header
+{
+width: 640px; 
+height: 21px; 
+background-image:url('../img/content_header2.png'); 
+text-align:left; 
+padding-top:10px; 
+padding-left:15px; 
+font-size:14px; 
+color:#002f65; 
+font-weight:bold;	
+}
+
+.footer
+{
+width: 100%; 
+height: 20px;
+background-color:#0A1857;
+width: 100%; 
+position:fixed;
+bottom:0px;
+left:0px;
+}
+.footer div
+{
+text-align:center;
+padding-top:2px;
+width: 919px; 
+color:#0050C1;
+}
+
+
+.grids input
+{
+background-image:url('../img/select.png');
+color:White;
+border:none;
+background-color:Transparent;
+width: 90px; 
+height: 31px;	
+}
+.grids input:hover
+{
+background-image:url('../img/select2.png');
+}
+
+.infobar
+{
+width: 916px; 
+height: 35px;
+
+}
+.infobar-holder
+{
+width:100%;
+top:0px;
+position:fixed;
+left:0px;
+background-color:#0A1857;
+z-index:999999;
+}
+
+#inner-wrap
+{
+width: 916px;
+
+}
+
+#main-wrap
+{
+width:961px;
+	
+}
+
+#login-body
+{
+width: 876px; 
+height: 288px;
+}
+
+.page-title
+{
+width: 800px; 
+height: 26px; 
+color:Black; 
+font-size:14px; 
+font-weight:bold;
+background-image:url('../img/page_title.png');
+text-align:left;
+padding-top:10px;
+padding-left:15px;
+margin-bottom:15px;
+float:left;
+}
+.menu-title
+{
+width: 183px; 
+height: 26px; 
+color:Black; 
+font-size:14px; 
+font-weight:bold;
+background-image:url('../img/page_title.png');
+text-align:left;
+padding-top:10px;
+padding-left:15px;
+margin-bottom:10px;
+}
+.login-wrapper
+{
+width: 497px; 
+height: 280px; 
+border:dotted 1px gray;
+font-family:Arial, MS Sans Serif, Verdana;
+font-size:12px;
+}
+
+#taskbar
+{
+float:left; 
+width:100%; 
+top:0px; 
+position:fixed; 
+background-image:url('../img/bar.png'); 
+height:34px; 
+margin:0px; 
+left:0px;	
+}
+
+#btn-menu
+{
+float:left; 
+margin-left:10px; 
+width: 180px; 
+text-align:center;
+padding-left:5px;
+background-color:Transparent;
+background-image:url(../img/hoverbg.png);
+border:none;
+height:30px;
+color:White;
+font-weight:bold;
+cursor:hand;
+}
+#btn-menu:hover
+{
+background-image:url(../img/hoverbg2.png);
+}
+
+.banner
+{
+width:100%;
+background-color:#0050C1;
+}
+
+.banner div
+{
+width:949px;
+height:40px; 
+text-align:left;
+color:White;
+font-size:16px;
+}
+
+#navigation
+{
+	width: 200px; 
+	background-color:#EDEDED;
+	height:100%;
+	vertical-align:top;
+}
+
+#right-content
+{
+height:100%;
+vertical-align:top;
+background-color:White;	
+height:800px;
+padding-bottom:50px;
+}
+
+#wrapper
+{
+width:1020px; height:100%;	
+}
+
+.paddtop
+{
+padding-top:90px;
+}
+
+
+.content-area
+{
+width:781px;
+text-align:left;
+font-size:12px;	
+
+}
+
+
+#tabs
+{
+font-size:12px;
+}
+#tabs div
+{
+font-size:12px;
+}
+
+#tabs td
+{
+font-size:12px;
+text-align:left;
+}
+
+
+/* Styles go here */
+
+.my-controller {
+  border: 1px solid #fcc;
+  padding: 5px;
+  margin: 3px;
+}
+.my-controller small {
+  color: #c99;
+}
+.other-controller {
+  border: 1px solid #ccf;
+  padding: 5px;
+  margin: 3px;
+}
+.other-controller small {
+  color: #99c;
+}
+.third-controller {
+  border: 1px solid #cfc;
+  padding: 5px;
+  margin: 3px;
+}
+.third-controller small {
+  color: #9c9;
+}
+

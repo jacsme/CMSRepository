@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+  http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
+  http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+	<context:property-placeholder location="/WEB-INF/database.properties" />
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${app.jdbc.driverClassName}" />
+		<property name="url" value="${app.jdbc.url}" />
+		<property name="username" value="${app.jdbc.username}" />
+		<property name="password" value="${app.jdbc.password}" />
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="annotatedClasses">
+			<list>
+				<value>com.wom.cms.model.LoginUser</value>
+				<value>com.wom.cms.model.Product</value>
+				<value>com.wom.cms.model.PurchaseOrder</value>
+				<value>com.wom.cms.model.PurchaseOrderProducts</value>
+				<value>com.wom.cms.model.Staff</value>
+				<value>com.wom.cms.model.Supplier</value>
+				<value>com.wom.cms.model.ProductSupplier</value>
+				<value>com.wom.cms.model.Category</value>
+			</list>
+		</property>
+		
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.connection.pool_size">10</prop>
+			</props>
+		</property>
+	</bean>
+	<bean id="txManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="persistenceExceptionTranslationPostProcessor"
+		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+
+	<bean id="staffDao" class="com.wom.cms.dao.StaffDaoImpl"></bean>
+	<bean id="staffService" class="com.wom.cms.services.StaffServiceImpl"></bean>
+	
+	<bean id="productDao" class="com.wom.cms.dao.ProductDaoImpl"></bean>
+	<bean id="productService" class="com.wom.cms.services.ProductServiceImpl"></bean>
+	
+	<bean id="salesDao" class="com.wom.cms.dao.SalesDaoImpl"></bean>
+	<bean id="salesService" class="com.wom.cms.services.SalesServiceImpl"></bean>
+	
+	<bean id="supplierDao" class="com.wom.cms.dao.SupplierDaoImpl"></bean>
+	<bean id="supplierService" class="com.wom.cms.services.SupplierServiceImpl"></bean>
+	
+	<bean id="prodsuppliertransferService" class="com.wom.cms.transferer.ProdSupplierTransferServiceImpl"></bean>
+	
+</beans>

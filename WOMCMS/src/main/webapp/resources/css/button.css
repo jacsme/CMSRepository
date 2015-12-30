@@ -1,0 +1,28 @@
+.button-blue
+{
+	background-image:url('../img/btn_blue.png');
+	color:White;
+	font-weight:bold;
+	border:none;
+	background-color:Transparent;
+	width: 127px; 
+	height: 36px;	
+}
+.button-blue:hover
+{
+	background-image:url('../img/btn_blue_hover.png');
+}
+.button-green
+{
+	background-image:url('../img/btn_green.png');
+	color:White;
+	font-weight:bold;
+	border:none;
+	background-color:Transparent;
+	width: 127px; 
+	height: 36px;	
+}
+.button-green:hover
+{
+	background-image:url('../img/btn_green_hover.png');
+}

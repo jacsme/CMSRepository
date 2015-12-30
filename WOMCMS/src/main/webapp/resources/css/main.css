@@ -1,0 +1,640 @@
+/*
+	Name: Hotel Room Reservation
+	Date: July 2009
+	Description: Main CSS design of the project.
+	Version: 1.0
+	Author: Hermoso, Jack Lord
+*/
+ 
+/* Imports */
+@import url("reset.css");
+@import url("global-forms.css");
+ 
+/***** Global *****/
+/* Body */
+	body {
+		background-image:url('../img/bg.jpg');
+		background-color: #474747;
+		background-repeat:repeat-x;
+		background-attachment:fixed;
+		
+		font-family:Arial, MS Sans Serif, Verdana;
+		font-size:12px;
+
+		line-height: 1.429;
+		margin: 0;
+		padding: 0;
+		text-align: left;
+	}
+ 
+/* Headings */
+h2 {font-size: 1.571em}	/* 22px */
+h3 {font-size: 1.429em}	/* 20px */
+h4 {font-size: 1.286em}	/* 18px */
+h5 {font-size: 1.143em}	/* 16px */
+h6 {font-size: 1em}	/* 14px */
+ 
+h2, h3, h4, h5, h6 {
+	font-weight: 400;
+	line-height: 1.1;
+	margin-bottom: .8em;
+}
+ 
+/* Anchors */
+a {outline: 0;}
+a img {border: 0px; text-decoration: none;}
+a:link, a:visited {
+	color: #C74350;
+	padding: 0 1px;
+	text-decoration: underline;
+}
+a:hover, a:active {
+	background-color: #ffba01;
+	color: #fff;
+	text-decoration: none;
+	text-shadow: 1px 1px 1px #333;
+}
+ 
+/* Paragraphs */
+p {margin-bottom: 1.143em;}
+* p:last-child {margin-bottom: 0;}
+ 
+strong, b {font-weight: bold;}
+em, i {font-style: italic;}
+ 
+::-moz-selection {background: #F6CF74; color: #fff;}
+::selection {background: #F6CF74; color: #fff;}
+ 
+/* Lists */
+ul {
+	list-style: outside disc;
+	margin: 1em 0 1.5em 1.5em;
+}
+ 
+ol {
+	list-style: outside decimal;
+	margin: 1em 0 1.5em 1.5em;
+}
+ 
+dl {margin: 0 0 1.5em 0;}
+dt {font-weight: bold;}
+dd {margin-left: 1.5em;}
+ 
+/* Quotes */
+blockquote {font-style: italic;}
+cite {}
+ 
+q {}
+ 
+/* Tables */
+table {
+		margin: .5em auto 1.5em auto; width: 98%;
+		border: 1px solid grey;
+	  	border-collapse: collapse;
+	  	padding: 5px;
+	  }
+ 
+	/* Thead */
+	thead th {
+		text-align: left;
+		border: 1px solid grey;
+	  	border-collapse: collapse;
+	  	padding: 5px;
+		}
+	thead td {
+		border: 1px solid grey;
+	  	border-collapse: collapse;
+	  	padding: 5px;
+	  	}
+ 
+	/* Tbody */
+	tbody td {
+		border: 1px solid grey;
+	  	border-collapse: collapse;
+	  	padding: 5px;}
+	tbody th {
+		border: 1px solid grey;
+	  	border-collapse: collapse;
+	  	padding: 5px;
+	}
+ 
+	tbody .alt td {}
+	tbody .alt th {}
+	
+	table tr:nth-child(odd) {
+	  background-color: #f1f1f1;
+	}
+	table tr:nth-child(even) {
+	  background-color: #ffffff;
+	} 
+ 
+	/* Tfoot */
+	tfoot th {}
+	tfoot td {}
+	
+/* HTML5 tags */
+header, section, footer,
+aside, nav, article, figure {
+	display: block;
+}
+	
+	/***** Layout *****/
+.body {clear: both; margin: 0 auto; width: 1200px;}
+img.right figure.right {float: right; margin: 0 0 2em 2em;}
+img.left, figure.left {float: right; margin: 0 0 2em 2em;}
+	
+	
+	/*
+	Header
+*****************/
+#banner {
+	margin: 0 auto;
+	padding: 2.5em 0 0 0;
+}
+ 
+	/* Banner */
+	#banner h1 {font-size: 3.571em; line-height: .6; color: #fff;}
+	#banner h1 a:link, #banner h1 a:visited {
+		color: #ffffff;
+		display: block;
+		font-weight: bold;
+		margin: 0 0 .6em .2em;
+		text-decoration: none;
+		width: 427px;
+	}
+	#banner h1 a:hover, #banner h1 a:active {
+		background: none;
+		color: #ffffff;
+		text-shadow: none;
+	}
+ 
+	#banner h1 strong {font-size: 0.36em; font-weight: normal;}
+	
+	/* Main Nav */
+	#banner nav {
+		background: #ffba01; /* Jack #000305;*/
+		font-size: 1.143em;
+		height: 40px;
+		line-height: 30px;
+		margin: 0 auto 1em auto; /*Jack Change it to 1 from 2*/
+		padding: 0;
+		text-align: center;
+		width: 1200px;
+		
+		border-radius: 5px;
+		-moz-border-radius: 5px;
+		-webkit-border-radius: 5px;
+		
+		/* Jack Applying CSS3 gradient*/
+		background: -moz-linear-gradient(center top , #ffba01,  #ffb101 10px, #fd8d02 20px);    
+		background: -webkit-gradient(linear, left top, left 20, from(#fd8d02), color-stop(5%, #ffb101) to(#fd8d02));
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FBFBFB', endColorstr='#fd8d02');
+	}
+	
+	#banner nav ul {
+		border-radius: 5px;  
+		list-style: none;
+		position: relative;
+	}
+	
+	#banner nav ul ul {
+		display: none;
+		padding-left:0;
+		
+	}
+	
+	#banner nav ul li a {
+		display: block; 
+		padding: 4px 40px;
+		color: #FFFFFF; 
+		text-decoration: none;
+	}
+	
+	
+	#banner nav ul li:hover > ul {
+		display: block;
+		list-style: none;
+		float:left;
+		position: absolute;
+		visibility:visible;
+		opacity:1;
+
+	    -webkit-transition:opacity 0.2s linear, visibility 0.2s linear;
+	    -moz-transition:opacity 0.2s linear, visibility 0.2s linear;
+	    -o-transition:opacity 0.2s linear, visibility 0.2s linear;
+	    transition:opacity 0.2s linear, visibility 0.2s linear;     
+	}
+	
+	#banner nav ul li:hover > ul {
+		display: block;
+		list-style: none;
+		float:left;
+		position: absolute;
+		visibility:visible;
+		opacity:1;
+
+	    -webkit-transition:opacity 0.2s linear, visibility 0.2s linear;
+	    -moz-transition:opacity 0.2s linear, visibility 0.2s linear;
+	    -o-transition:opacity 0.2s linear, visibility 0.2s linear;
+	    transition:opacity 0.2s linear, visibility 0.2s linear;     
+	} 
+	#banner nav ul li {
+		float: left;
+	}
+	
+	#banner nav ul li:hover {
+		background: #ffba01;
+		display: block;
+		float:left;
+		
+	}
+	#banner nav ul li:hover a {
+		color: #FFFFFF;
+		display: block;
+		float:left;
+		position: relative;
+		
+	}
+	
+	#banner nav ul ul {
+		background: #ffba01; border-radius: 0px; padding: 0;
+		position: absolute; 
+		margin: 5px 0px;
+		
+	}
+	#banner nav ul ul li {
+		border-top: 1px solid #ffba01;;
+		border-bottom: 1px solid #ffba01;
+		position: relative;
+		display: block;
+		float: none; 
+	}
+	#banner nav ul ul li a {
+		padding: 4px 40px;
+		color: #ffba01;
+		position: relative;
+		display: block;
+		float:left;
+	}	
+	
+	#banner nav ul ul li a:hover {
+		padding: 4px 40px;
+		background: #ffba01;
+		position: relative;
+		display: block;
+		float:left;
+	}
+
+	#banner nav ul ul ul {
+		position: relative; left: 100%; top:0; width: 200px;
+		float:none;
+		
+	}
+
+/*
+Featured
+*****************/
+#featured {
+	background: #fff;
+	margin-bottom: 2em;
+	overflow: hidden;
+	padding: 20px;
+	width: 760px;
+ 
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+ 
+#featured figure {
+	border: 2px solid #eee;
+	float: right;
+	margin: 0.786em 2em 0 5em;
+	width: 248px;
+}
+#featured figure img {display: block; float: right;}
+ 
+#featured h2 {color: #C74451; font-size: 1.714em; margin-bottom: 0.333em;}
+#featured h3 {font-size: 1.429em; margin-bottom: .5em;}
+ 
+#featured h3 a:link, #featured h3 a:visited {color: #000305; text-decoration: none;}
+#featured h3 a:hover, #featured h3 a:active {color: #fff;}
+ 
+
+/*
+	Body
+*****************/
+#content {
+	
+	background: #fff;
+	margin-bottom: 2em;
+	overflow: hidden;
+	padding: 20px 20px;
+	width: 1162px;
+	height: 500px;
+ 
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+
+#content img {
+	float: center; margin: 160px 380px;
+	width: 400px;
+	height: 150px;
+}
+
+/* Change Password Content */
+#cpcontent {
+	
+	background: #fff;
+	margin-bottom: 2em;
+	overflow: hidden;
+	padding: 20px 10px;
+	width: 1180px;
+	height: 300px;
+ 
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+
+/* Upload Images Content */
+#uicontent {
+	
+	background: #fff;
+	margin-bottom: 2em;
+	overflow: hidden;
+	padding: 20px 20px;
+	width: 1200px;
+	height: 100%;
+ 
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+	/*
+	Extras
+*****************/
+#extras {margin: 0 auto 3em auto; overflow: hidden;}
+ 
+#extras ul {list-style: none; margin: 0;}
+#extras li {border-bottom: 1px solid #fff;}
+#extras h2 {
+	color: #C74350;
+	font-size: 1.429em;
+	margin-bottom: .25em;
+	padding: 0 3px;
+}
+ 
+#extras a:link, #extras a:visited {
+	color: #444;
+	display: block;
+	border-bottom: 1px solid #F4E3E3;
+	text-decoration: none;
+	padding: .3em .25em;
+}
+ 
+	/* Blogroll */
+	#extras .blogroll {
+		float: left;
+		width: 615px;
+	}
+ 
+	#extras .blogroll li {float: left; margin: 0 20px 0 0; width: 185px;}
+ 
+	/* Social */
+	#extras .social {
+		float: right;
+		width: 175px;
+	}
+	
+	#extras li:last-child, /* last <li>*/
+	#extras li:last-child a /* <a> of last <li> */
+	{border: 0}
+	
+	#extras .blogroll li:nth-last-child(2),
+#extras .blogroll li:nth-last-child(3),
+#extras .blogroll li:nth-last-child(2) a,
+#extras .blogroll li:nth-last-child(3) a {border: 0;}
+	
+	#extras div[class='social'] a {
+	background-repeat: no-repeat;
+	background-position: 3px 6px;
+	padding-left: 25px;
+}
+ 
+/* Icons */
+.social a[href*='delicious.com'] {background-image: url('../images/icons/delicious.png');}
+.social a[href*='digg.com'] {background-image: url('../images/icons/digg.png');}
+.social a[href*='facebook.com'] {background-image: url('../images/icons/facebook.png');}
+.social a[href*='last.fm'], .social a[href*='lastfm'] {background-image: url('../images/icons/lastfm.png');}
+.social a[href*='/feed/'] {background-image: url('../images/icons/rss.png');}
+.social a[href*='twitter.com'] {background-image: url('../images/icons/twitter.png');}
+	
+	
+	/*
+	About
+*****************/
+#about {
+	background: #fff;
+	font-style: normal;
+	margin-bottom: 2em;
+	overflow: hidden;
+	padding: 20px;
+	text-align: left;
+	width: 1162px;
+ 
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+ 
+#about .primary {float: left; width: 165px;}
+#about .primary strong {color: #C64350; display: block; font-size: 1.286em;}
+#about .photo {float: left; margin: 5px 20px;}
+ 
+#about .url:link, #about .url:visited {text-decoration: none;}
+ 
+#about .bio {float: right; width: 500px;}
+ 
+/*
+
+/*
+	About Product
+*****************/
+#aboutproduct {
+	background: #fff;
+	font-style: normal;
+	margin-bottom: 2em;
+	overflow: hidden;
+	padding: 20px;
+	text-align: left;
+	width: 1200px;
+ 
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+ 
+#aboutproduct .primary {float: left; width: 165px;}
+#aboutproduct .primary strong {color: #C64350; display: block; font-size: 1.286em;}
+#aboutproduct .photo {float: left; margin: 5px 20px;}
+ 
+#aboutproduct .url:link, #about .url:visited {text-decoration: none;}
+ 
+#aboutproduct .bio {float: right; width: 500px;}
+ 
+/*
+	Footer
+*****************/
+#contentinfo {padding-bottom: 2em; text-align: right; width: 1200px; }
+	
+	 
+/* Blog */
+.hentry {
+	border-bottom: 1px solid #eee;
+	padding: 1.5em 0;
+}
+li:last-child .hentry, #content > .hentry {border: 0; margin: 0;}
+#content > .hentry {padding: 1em 0;}
+ 
+.entry-title {font-size: 1.429em; margin-bottom: 0;}
+.entry-title a:link, .entry-title a:visited {text-decoration: none;}
+ 
+.hentry .post-info * {font-style: normal;}
+ 
+	/* Content */
+	.hentry footer {margin-bottom: 2em;}
+	.hentry footer address {display: inline;}
+	#posts-list footer address {display: block;}
+ 
+	/* Blog Index */
+	#posts-list {list-style: none; margin: 0;}
+	#posts-list .hentry {padding-left: 200px; position: relative;}
+	#posts-list footer {
+		left: 10px;
+		position: absolute;
+		top: 1.5em;
+		width: 190px;
+	}
+	
+	#posts-list .hentry:hover {
+	background: #C64350;
+	color: #fff;
+}
+#posts-list .hentry:hover a:link, #posts-list .hentry:hover a:visited {
+	color: #F6CF74;
+	text-shadow: 1px 1px 1px #333;
+}
+
+/*------These are my css
+Jack
+
+*/
+
+	table#tblBody td.label {
+		text-align: right;
+		width: 120px;
+		padding: 10px 0;
+	}
+	table#tblBody td.input {width: 180px;}
+	
+	table#tblButtons td {
+		text-align: center;
+		font-weight: bold;
+		width: 180px;
+		color: #ffffff;
+		padding: 10px 0;
+		border-right: #ffffff;
+	}
+	
+.table-list th{
+    background: #EDF2F6;
+    border-bottom: 1px dotted #DDDDDD;
+    color: #444444;
+    font-size: 12px;
+    font-weight: normal !important;
+    height: 28px;
+    line-height: 28px;
+    padding-left: 5px;
+    text-align: left;
+}
+.table-list td{
+    border-bottom: 1px dotted #EAEAEA;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    height: 28px;
+    padding: 5px;
+    text-align: left;
+}
+.table-list tr:hover{
+    background: #E3F3F9;
+}
+
+/*
+	Child Body
+*****************/
+#pcontent {
+	background: #fff;
+	margin-bottom: 2em;
+	overflow: hidden;
+	padding: 20px 20px;
+	width: 600px;
+ 
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+	
+ 
+/*
+	Inner content
+*****************/
+#inner-content {
+	
+	background: #56CF5C;	
+	/*Applying CSS3 gradient
+    background: -moz-linear-gradient(center top , #FFFFFF,  #C6DEFF 1px, #C2DFFF 6px);    
+    background: -webkit-gradient(linear, left top, left 20, from(#FFFFFF), color-stop(5%, #EEEEEE) to(#FFFFFF));
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FBFBFB', endColorstr='#FFFFFF');
+	*/
+	margin-bottom: 1em;
+	overflow: hidden;
+	padding: 20px 20px;
+	width: 720px;
+ 
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+
+/* Styles go here */
+
+.my-controller {
+  border: 1px solid #fcc;
+  margin-top: 3px;;
+  margin-left: -30px;
+  width: 1180px;
+}
+.my-controller small {
+  color: #c99;
+}
+.other-controller {
+  border: 1px solid #ccf;
+  margin-top: 3px;;
+  margin-left: -30px;
+  width: 1180px;
+}
+.other-controller small {
+  color: #99c;
+}
+.third-controller {
+  border: 1px solid #cfc;
+  padding: 5px;
+  margin: 3px;
+}
+.third-controller small {
+  color: #9c9;
+}
+ 
