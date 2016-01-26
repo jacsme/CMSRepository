@@ -1,14 +1,12 @@
 package com.wom.cms.model;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "womdatabase.tblproductsupplier")
@@ -16,11 +14,21 @@ public class ProductSupplier implements Serializable{
 
 	private static final long serialVersionUID = -7860222614035058667L;
 	
+	public ProductSupplier(){}
+	public ProductSupplier(BigInteger id, String productcode, String suppliercode, String packquantity, String packunit, String packprice, String paymentterms){
+		this.id = id;
+		this.productCode = productcode;
+		this.supplierCode = suppliercode;
+		this.packQuantity = packquantity;
+		this.packUnit = packunit;
+		this.packPrice = packprice;
+		this.paymentTerms = paymentterms;
+	}
 	@Id
-	@GenericGenerator(name = "idgen", strategy = "increment")
-	@GeneratedValue(generator="idgen")
+	//@GenericGenerator(name = "idgen", strategy = "increment")
+	//@GeneratedValue(generator="idgen")
 	@Column(name = "Id")
-	private long id;
+	private BigInteger id;
 	
 	@Column(name = "SupplierCode")
 	private String supplierCode;
@@ -40,11 +48,11 @@ public class ProductSupplier implements Serializable{
 	@Column(name = "PaymentTerms")
 	private String paymentTerms;
 
-	public long getId() {
+	public BigInteger getId() {
 		return id;
 	}
-	
-	public void setId(long id) {
+
+	public void setId(BigInteger id) {
 		this.id = id;
 	}
 

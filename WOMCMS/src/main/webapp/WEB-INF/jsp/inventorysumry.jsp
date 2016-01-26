@@ -5,7 +5,7 @@
     pageEncoding="UTF-8"%>
     
 <!DOCTYPE html>
-<html data-ng-app="productapp">
+<html data-ng-app="inventoryapp">
 <head>
 <meta charset="utf-8" />
 <title>WOM Content Management System</title>
@@ -22,24 +22,22 @@
 	<script src= '<c:url value="/resources/js/angular/dirPagination.js" />'></script>
 	<script data-require="bootstrap@3.1.1" data-semver="3.1.1" src='<c:url value="/resources/js/bootstrap/bootstrap.min.js" />'></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-animate.js"></script>
-	<link rel="stylesheet" type="text/css" href='<c:url value="/resources/css/input.css" />'/>
-   <link rel="stylesheet" type="text/css" href='<c:url value="/resources/css/button.css" />'/>
 </head>
   
   
 <style>
-	#product table{
+	#inventory table{
 		width: 1500px;
 	}
-	#product table, th , td {
+	#inventory table, th , td {
 	  border: 1px solid grey;
 	  border-collapse: collapse;
 	  padding: 5px;
 	}
-	#product table tr:nth-child(odd) {
+	#inventory table tr:nth-child(odd) {
 	  background-color: #f1f1f1;
 	}
-	#product table tr:nth-child(even) {
+	#inventory table tr:nth-child(even) {
 	  background-color: #ffffff;
 	}
 	
@@ -57,23 +55,30 @@
 </style> 
 <script>
 	
-    var productapp = angular.module('productapp', ['angularUtils.directives.dirPagination', 'ui.bootstrap', 'xeditable' ]);
+    var inventoryapp = angular.module('inventoryapp', ['angularUtils.directives.dirPagination', 'ui.bootstrap', 'xeditable' ]);
     
-    productapp.controller('ProductController', function ($scope, $http){
+    inventoryapp.controller('SummaryController', function ($scope, $http){
     	
     	$scope.currentPage = 1;
     	$scope.pageSize = 10;
     	
-    	$scope.getProductList = function() {  
+    	$scope.getInventoryList = function() {  
     		$scope.loading = true;
+    		var paramstocklevel;
+    		console.log("Select " + $scope.stocklevellist.selected);
+    		if(typeof $scope.stocklevellist.selected === 'undefined'){ 
+    			paramstocklevel = '-'
+    		}else{
+    			paramstocklevel= $scope.stocklevellist.selected;
+    		}
     		
     		if($scope.productcode === ''){ $scope.productcode = '-'}
-    		if($scope.brand === ''){ $scope.brand = '-'}
-    		if($scope.categorycode === ''){ $scope.categorycode = '-'}
+    		if($scope.stocklocation === ''){ $scope.stocklocation = '-'}
     		
-        	$http.get('searchPromoProducts/' + $scope.productcode + '/' + $scope.brand + '/' + $scope.categorycode)
+        	$http.get('searchInventoryList/' + encodeURIComponent($scope.productcode) + '/' + encodeURIComponent(paramstocklevel) + '/' + encodeURIComponent($scope.stocklocation))
             .success(function(data, status, headers, config) {
-            	$scope.productlist = data;
+            	console.log("search >> " + data);
+            	$scope.inventorylist = data;
             	$scope.loading = false;
             })
             .error(function(data, status, headers, config) {
@@ -82,35 +87,29 @@
             });
         };
         
-        $scope.saveEditedProduct = function(data) {
+        $scope.stocklevellist = {
+  		    availableOptions: [
+  		      {id: '1', level: 'Units on Hand'},
+  		      {id: '2', level: 'Unit Finished'},
+  		    ],
+     	};
+        
+  		$scope.saveEditedLocation = function(data) {
         	
-	        $scope.loading = true;
-	        console.log('Promotional Amount ' + data.promotionalprice);
-	        var discountamount = 0;
-	        var discount = 0;
-	        
-	    	if(data.promotionalprice !== '0' && data.promotionalprice !== '0.00' && data.promotionalprice !== '0.0'){
-	    	    discountamount = (data.rrprice - data.promotionalprice).toFixed(2);
-	    	    discount = (discountamount/data.rrprice * 100).toFixed(2);
-	    	}else{
-	    		discountamount = 0;
-	    	    discount = 0;
-	    	}
-	    	console.log('Discount Amount ' + discountamount);
-	    	console.log('Discount ' + discount);
-	    	
-            $http.post('updatepromotional1/' + data.pcode + '/' + data.rrprice + '/' + discount + '/' + discountamount + '/' + data.promotionalprice)
+        	$scope.loading = true;
+    		
+            $http.post('updateInventoryLocation/' + data.location + '/' + encodeURIComponent(data.pcode))
             .success(function(data, status, headers, config) {
             	alert("Successfully Saved");
             	$scope.loading = false;
             })
-            
             .error(function(data, status, headers, config) {
-               // called asynchronously if an error occurs
-              // or server returns response with an error status.
+            	alert("Error");
+            	$scope.loading = false;
             });
         };
-       
+
+        
         $scope.cancel = function () {
             window.location.reload(); 
         };
@@ -124,7 +123,7 @@
    	    console.log('going to page ' + num);
    	  };
   }
-    productapp.controller('PageController', PageController);
+    inventoryapp.controller('PageController', PageController);
 </script>
 </head>
 
@@ -152,27 +151,29 @@
 <div class="container">
     <div class="row">
     <div class="col-lg-8">
-	<div data-ng-controller="ProductController" class="my-controller"> 
+	<div data-ng-controller="SummaryController" class="my-controller"> 
 		<table>
-			<tr>
-				<td colspan = "2" style="text-align:center"> <h3>Product Promotional 1</h3> </td>
-			</tr>
-			<tr>
-				<td style="text-align:right" width="390px">Category Code : </td>
-				<td><input id="categorycode" name="categorycode" type="text" data-ng-model="categorycode" data-ng-init="categorycode='-'" size="70px"/></td>
-	        </tr>
-	         <tr>
-		        <td style="text-align:right" width="390px">Brand Name : </td>
-				<td><input id="brand" name="brand" type="text" data-ng-model="brand" data-ng-init="brand='-'" size="70px"/></td>
-			</tr>
-			 <tr>
+		 	<tr>
 		        <td style="text-align:right" width="390px">Product Code : </td>
 				<td><input id="productcode" name="productcode" type="text" data-ng-model="productcode"  data-ng-init="productcode='-'" size="70px"/></td>
 			</tr>
+	        <tr>
+		        <td style="text-align:right" width="390px">Stock Level : </td>
+				<td>
+					<select name="repeatstocklevellist" id="repeatstocklevellist" data-ng-model="stocklevellist.selected" style="height:30px; width:425px">
+	      				<option data-ng-repeat="stocklevel in stocklevellist.availableOptions" value="{{stocklevel.level}}">{{stocklevel.level}}</option>
+	   	 			</select>
+				
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align:right" width="390px">Stock Location : </td>
+				<td><input id="stocklocation" name="stocklocation" type="text" data-ng-model="stocklocation" data-ng-init="stocklocation='-'" size="70px"/></td>
+	        </tr>
 			<tr>
 		        <td colspan="2" style="text-align:center">
-		        	<button class="button-blue" data-ng-click="getProductList()">Search</button>
-		        	<button class="button-blue" data-ng-click="cancel()">Cancel</button>
+		        	<button data-ng-click="getInventoryList()">Search</button>
+		        	<button data-ng-click="cancel()">Cancel</button>
 		        </td>
 	        </tr>
 		</table>
@@ -204,55 +205,60 @@
 				<thead>
 					<tr>
 						<th>No</th>
-						<th>Supplier Code</th>
-						<th>Supplier Name</th>
+						<th>Date</th>
 						<th>Product Code</th>
-						<th>Brand Name</th>
+						<th>Brand</th>
 						<th>Product Name</th>
-						<th>Buying Price</th>
+						<th>Weight</th>
+						<th>Mass</th>
+						<th>Location</th>
+						<th>BPrice</th>
 						<th>RRPrice</th>
-						<th>BP Disc %</th>
-						<th>RRP Disc %</th>
-						<th>Disc Amount</th>
-						<th>Promo Price</th>
+						<th>Units</th>
+						<th>Photo</th>
 						<th>Edit</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr data-dir-paginate="products in productlist | filter:q | itemsPerPage: pageSize" data-current-page="currentPage">
+					<tr data-dir-paginate="inventory in inventorylist | filter:q | itemsPerPage: pageSize" data-current-page="currentPage">
 					   	<td>{{ $index + 1 }}</td>
 					   	
-					   	<td><span data-editable-text="products.supplierCode" data-e-name="suppliercode" data-e-form="rowform" data-e-style="width: 80px" data-e-disabled="disabled">
-					    {{ products.supplierCode }}</span></td>
+					   	<td><span data-editable-text="inventory.transactionDate" data-e-name="tdate" data-e-form="rowform" data-e-style="width: 67px" data-e-disabled="disabled">
+					    {{ inventory.transactionDate }}</span></td>
+					    
+					    <td><span data-editable-text="inventory.productCode" data-e-name="pcode" data-e-form="rowform" data-e-style="width: 70px" data-e-disabled="disabled">
+					    {{ inventory.productCode }}</span></td>
+					    
+					    <td><span data-editable-textarea="inventory.brand" data-e-name="brandname" data-e-form="rowform" data-e-style="width: 75px;  height: 60px" data-e-disabled="disabled">
+					    {{ inventory.brand }} </span></td>
+					    
+					    <td><span data-editable-textarea="inventory.productName" data-e-name="productname" data-e-form="rowform" data-e-style="width: 130px; height: 60px" data-e-disabled="disabled">
+					    {{ inventory.productName }} </span></td>
+					    
+    					<td><span data-editable-text="inventory.packWeight" data-e-name="packweight" data-e-form="rowform" data-e-style="width: 35px" data-e-disabled="disabled">
+					    {{ inventory.packWeight }} </span></td>
+					    
+					    <td><span data-editable-text="inventory.packMass" data-e-name="packmass" data-e-form="rowform" data-e-style="width: 50px" data-e-disabled="disabled">
+					    {{ inventory.packMass }} </span></td>
+						
+						<td><span data-editable-text="inventory.location" data-e-name="location" data-e-form="rowform" data-e-style="width: 60px">
+					    {{ inventory.location }} </span></td>
 					
-						<td><span data-editable-textarea="products.supplierName" data-e-name="suppliername" data-e-form="rowform" data-e-style="width: 85px; height: 60px" data-e-disabled="disabled">
-					    {{ products.supplierName }}</span></td>
-					
-					    <td><span data-editable-text="products.productCode" data-e-name="pcode" data-e-form="rowform" data-e-style="width: 75px" data-e-disabled="disabled">
-					    {{ products.productCode }}</span></td>
+					    <td><span data-editable-text="inventory.buyingPrice" data-e-name="buyingprice" data-e-form="rowform" data-e-style="width: 55px" data-e-disabled="disabled">
+					    {{ inventory.buyingPrice }} </span></td>
+						
+					    <td><span data-editable-text="inventory.rrprice" data-e-name="rrprice" data-e-form="rowform" data-e-style="width: 55px" data-e-disabled="disabled">
+					    {{ inventory.rrprice }} </span></td>
 					    
-					    <td><span data-editable-textarea="products.brandName" data-e-name="brandname" data-e-form="rowform" data-e-style="width: 57px;  height: 60px" data-e-disabled="disabled">
-					    {{ products.brandName }} </span></td>
+					    <td><span data-editable-text="inventory.units" data-e-name="units" data-e-form="rowform" data-e-style="width: 40px" data-e-disabled="disabled">
+					    {{ inventory.units }} </span></td>
 					    
-					    <td><span data-editable-textarea="products.productName" data-e-name="productname" data-e-form="rowform" data-e-style="width: 130px; height: 60px" data-e-disabled="disabled">
-					    {{ products.productName }} </span></td>
+					    <td><span data-editable-text="inventory.photo" data-e-name="photo" data-e-form="rowform" data-e-style="width: 30px" data-e-disabled="disabled">
+					    {{ inventory.photo }} </span></td>
 					    
-					    <td><span data-editable-text="products.buyingPrice" data-e-name="packPrice" data-e-form="rowform" data-e-style="width: 45px">
-					    {{ products.buyingPrice }} </span></td>
-	
-					    <td><span data-editable-text="products.retailPrice" data-e-name="rrprice" data-ng-model="rrprice" data-e-form="rowform" data-e-style="width: 45px">
-					    {{ products.retailPrice }} </span></td>
-					    
-					    <td>{{products.promotionalPrice > 0 ? (products.buyingPrice- products.promotionalPrice)/products.buyingPrice * 100 : 0.00 }} </td>
-					    <td>{{products.promotionalPrice > 0 ? (products.retailPrice- products.promotionalPrice)/products.retailPrice * 100 : 0.00 }} </td>
-					    <td>{{products.promotionalPrice > 0 ? products.retailPrice- products.promotionalPrice : 0.00 }} </td>
-					    
-					    <td><span data-editable-text="products.promotionalPrice" data-e-name="promotionalprice" data-ng-model="promotionalprice" data-e-form="rowform" data-e-style="width: 35px">
-					    {{ products.promotionalPrice }} </span></td>
-					
 					    <td style="white-space: nowrap">
 					    <!-- form -->
-					        <form data-editable-form name="rowform" data-onbeforesave="saveEditedProduct($data)" data-ng-show="rowform.$visible" class="form-buttons form-inline">
+					        <form data-editable-form name="rowform" data-onbeforesave="saveEditedLocation($data)" data-ng-show="rowform.$visible" class="form-buttons form-inline">
 					          <button type="submit" data-ng-disabled="rowform.$waiting" class="btn btn-primary">
 					            save
 					          </button>

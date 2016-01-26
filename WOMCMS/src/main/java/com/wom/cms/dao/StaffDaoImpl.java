@@ -1,8 +1,10 @@
 package com.wom.cms.dao;
 
+import javax.annotation.Resource;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.wom.cms.constant.MainEnum;
 import com.wom.cms.constant.StatusCode;
@@ -12,22 +14,22 @@ import com.wom.cms.factory.FactoryEntityService;
 import com.wom.cms.factory.FactoryEntityServiceImpl;
 import com.wom.cms.model.LoginUser;
 import com.wom.cms.util.HibernateUtil;
-
+@Transactional
 public class StaffDaoImpl implements StaffDao{
 	
-	@Autowired
-	SessionFactory sessionFactory;
+	@Resource(name="sessionFactory")
+	private SessionFactory sessionFactory;
+	Session session; 
 	
 	FactoryEntityService<LoginUser> factoryentityService = new FactoryEntityServiceImpl<LoginUser>();
 	
 	@Override
 	public String submitNewPassword(String userid, String password) throws Exception {
 		
-		Session session = HibernateUtil.callSession(sessionFactory);
 		String encryptedpwd = null;
 		String results = null;
 		try {
-			
+			session = sessionFactory.openSession();
 			LoginUser loginuser = factoryentityService.getEntity(MainEnum.LOGIN, userid, session);
 			
 			if (loginuser==null){
@@ -38,22 +40,18 @@ public class StaffDaoImpl implements StaffDao{
 				session.save(loginuser);
 				results = "You have successfully change your password";
 			}
-			HibernateUtil.callCommit(sessionFactory);
+			HibernateUtil.callCommitClose(session);
 		} catch (Exception e) {
 			results = e.getMessage();
-		}finally{
-			HibernateUtil.callClose(sessionFactory);
 		}
 		return results;
 	}
 	
 	@Override
 	public String submitLogin(String userid, String password) throws Exception {
-		
-		Session session = HibernateUtil.callSession(sessionFactory);
 		String results = null;
 		try {
-			
+			session = sessionFactory.openSession();
 			LoginUser loginuser = factoryentityService.getEntity(MainEnum.LOGIN, userid, session);
 			
 			if (loginuser==null){
@@ -65,11 +63,10 @@ public class StaffDaoImpl implements StaffDao{
 					results = StatusCode.LOGIN_PASSWORD_ERROR_CODE;
 				}
 			}
-			HibernateUtil.callCommit(sessionFactory);
 		} catch (Exception e) {
 			results = StatusCode.LOGIN_PASSWORD_ERROR_CODE;
 		}finally{
-			HibernateUtil.callClose(sessionFactory);
+			HibernateUtil.callClose(session);
 		}
 		return results;
 	}

@@ -34,15 +34,15 @@ public class SalesController {
 	
 	/** GET Request 
 	 * @throws JSONException **/
-	@RequestMapping(value = "/searchSalesOrder/{saleseordercode:.+}/{customercode:.+}/{dateordered:.+}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/searchSalesOrder/{saleseordercode:.+}/{customercode:.+}/{datedelivered:.+}", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<SalesOrderVO> searchSalesOrderGET(@PathVariable("saleseordercode") String saleseordercode,
-			@PathVariable("customercode") String customercode, @PathVariable("dateordered") String dateordered) throws Exception{
+			@PathVariable("customercode") String customercode, @PathVariable("datedelivered") String datedelivered) throws Exception{
 		
-		logger.info(" Request for searchSalesOrderGET() " + saleseordercode + "/" + customercode + "/" + dateordered);
+		logger.info(" Request for searchSalesOrderGET() " + saleseordercode + "/" + customercode + "/" + datedelivered);
 		
 		List<SalesOrderVO> searchsalesorderlist = null;
 		try{
-			searchsalesorderlist = salesService.searchSalesOrder(saleseordercode, customercode, dateordered);
+			searchsalesorderlist = salesService.searchSalesOrder(saleseordercode, customercode, datedelivered);
 		}catch(Exception e){
 			e.printStackTrace();
 		}

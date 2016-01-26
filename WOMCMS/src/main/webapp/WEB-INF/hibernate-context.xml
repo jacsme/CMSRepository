@@ -29,6 +29,8 @@
 				<value>com.wom.cms.model.Supplier</value>
 				<value>com.wom.cms.model.ProductSupplier</value>
 				<value>com.wom.cms.model.Category</value>
+				<value>com.wom.cms.model.AuditTrail</value>
+				<value>com.wom.cms.model.Inventory</value>
 			</list>
 		</property>
 		
@@ -56,9 +58,12 @@
 	<bean id="salesDao" class="com.wom.cms.dao.SalesDaoImpl"></bean>
 	<bean id="salesService" class="com.wom.cms.services.SalesServiceImpl"></bean>
 	
+	<bean id="inventoryDao" class="com.wom.cms.dao.InventoryDaoImpl"></bean>
+	<bean id="inventoryService" class="com.wom.cms.services.InventoryServiceImpl"></bean>
+	
 	<bean id="supplierDao" class="com.wom.cms.dao.SupplierDaoImpl"></bean>
 	<bean id="supplierService" class="com.wom.cms.services.SupplierServiceImpl"></bean>
-	
+
 	<bean id="prodsuppliertransferService" class="com.wom.cms.transferer.ProdSupplierTransferServiceImpl"></bean>
 	
 </beans>

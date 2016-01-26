@@ -10,33 +10,29 @@ public class HibernateUtil {
 	public static Transaction tx;
 	 
 	public static Session callSession(SessionFactory sessionFactory){
-		
 		session = sessionFactory.openSession();
-		tx = session.getTransaction();
-		session.beginTransaction();
+		//tx = session.getTransaction();
+		//session.beginTransaction();
 		
 		return session;
 	}
 	
-	public static void callCommit(SessionFactory sessionFactory){
+	public static void callCommit(Session session){
+		//tx = session.getTransaction();
+		//tx.commit();
 		session.flush();
-		tx.commit();
+		session.clear();
 	}
 	
-	public static void callClose(SessionFactory sessionFactory){
-		session.close();
-		
+	public static void callClose(Session session){
+		session.flush();
+		session.clear();
+		//session.close();
 	}
 	
-	public static void callCommitClose(SessionFactory sessionFactory){
-		tx.commit();
-		session.close();
+	public static void callCommitClose(Session session){
+		session.flush();
+		session.clear();
 	}
-	
-	public static void callRollBack(SessionFactory sessionFactory){
-		tx.rollback();
-	}
-	
-	
 }
 

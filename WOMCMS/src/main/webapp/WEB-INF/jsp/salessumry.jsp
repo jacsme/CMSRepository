@@ -22,8 +22,6 @@
 	<script src= '<c:url value="/resources/js/angular/dirPagination.js" />'></script>
 	<script data-require="bootstrap@3.1.1" data-semver="3.1.1" src='<c:url value="/resources/js/bootstrap/bootstrap.min.js" />'></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-animate.js"></script>
-	<link rel="stylesheet" type="text/css" href='<c:url value="/resources/css/input.css" />'/>
-   <link rel="stylesheet" type="text/css" href='<c:url value="/resources/css/button.css" />'/>
 </head>
   
   
@@ -71,8 +69,9 @@
     		if($scope.brand === ''){ $scope.brand = '-'}
     		if($scope.categorycode === ''){ $scope.categorycode = '-'}
     		
-        	$http.get('searchPromoProducts/' + $scope.productcode + '/' + $scope.brand + '/' + $scope.categorycode)
+        	$http.get('searchProductCode/' + encodeURIComponent($scope.productcode) + '/' + encodeURIComponent($scope.brand) + '/' + encodeURIComponent($scope.categorycode))
             .success(function(data, status, headers, config) {
+            	console.log("search >> " + data);
             	$scope.productlist = data;
             	$scope.loading = false;
             })
@@ -84,33 +83,21 @@
         
         $scope.saveEditedProduct = function(data) {
         	
-	        $scope.loading = true;
-	        console.log('Promotional Amount ' + data.promotionalprice);
-	        var discountamount = 0;
-	        var discount = 0;
-	        
-	    	if(data.promotionalprice !== '0' && data.promotionalprice !== '0.00' && data.promotionalprice !== '0.0'){
-	    	    discountamount = (data.rrprice - data.promotionalprice).toFixed(2);
-	    	    discount = (discountamount/data.rrprice * 100).toFixed(2);
-	    	}else{
-	    		discountamount = 0;
-	    	    discount = 0;
-	    	}
-	    	console.log('Discount Amount ' + discountamount);
-	    	console.log('Discount ' + discount);
-	    	
-            $http.post('updatepromotional1/' + data.pcode + '/' + data.rrprice + '/' + discount + '/' + discountamount + '/' + data.promotionalprice)
+        	$scope.loading = true;
+        	if(data.description === ''){ data.description = '-'}
+    		if(data.keepfresh === ''){ data.keepfresh = '0'}
+    		
+            $http.post('updateproductmaindetails/' + data.pcode + '/' + encodeURIComponent(data.brandname) + '/' + encodeURIComponent(data.productname) + '/' + data.categorycode2 + '/' + data.photocode + '/' + data.unitquantity + '/' + data.packquantity + '/' + data.rrprice + '/' + data.discount + '/' + data.packweight + '/' + data.packmass + '/' + data.compareweight + '/' + data.comparemass + '/' + data.gst)
             .success(function(data, status, headers, config) {
             	alert("Successfully Saved");
             	$scope.loading = false;
             })
-            
             .error(function(data, status, headers, config) {
                // called asynchronously if an error occurs
               // or server returns response with an error status.
             });
         };
-       
+        
         $scope.cancel = function () {
             window.location.reload(); 
         };
@@ -155,9 +142,6 @@
 	<div data-ng-controller="ProductController" class="my-controller"> 
 		<table>
 			<tr>
-				<td colspan = "2" style="text-align:center"> <h3>Product Promotional 1</h3> </td>
-			</tr>
-			<tr>
 				<td style="text-align:right" width="390px">Category Code : </td>
 				<td><input id="categorycode" name="categorycode" type="text" data-ng-model="categorycode" data-ng-init="categorycode='-'" size="70px"/></td>
 	        </tr>
@@ -171,8 +155,8 @@
 			</tr>
 			<tr>
 		        <td colspan="2" style="text-align:center">
-		        	<button class="button-blue" data-ng-click="getProductList()">Search</button>
-		        	<button class="button-blue" data-ng-click="cancel()">Cancel</button>
+		        	<button data-ng-click="getProductList()">Search</button>
+		        	<button data-ng-click="cancel()">Cancel</button>
 		        </td>
 	        </tr>
 		</table>
@@ -204,52 +188,68 @@
 				<thead>
 					<tr>
 						<th>No</th>
-						<th>Supplier Code</th>
-						<th>Supplier Name</th>
 						<th>Product Code</th>
-						<th>Brand Name</th>
+						<th>Brand</th>
 						<th>Product Name</th>
-						<th>Buying Price</th>
+						<th>Category Code</th>
+						<th>BarCode</th>
+						<th>Unit Qty</th>
+						<th>Pack Qty</th>
 						<th>RRPrice</th>
-						<th>BP Disc %</th>
-						<th>RRP Disc %</th>
-						<th>Disc Amount</th>
-						<th>Promo Price</th>
+						<th>Disc</th>
+						<th>Pack Weight</th>
+						<th>Pack Mass</th>
+						<th>Compare Weight</th>
+						<th>Compare Mass</th>
+						<th>GST</th>
 						<th>Edit</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr data-dir-paginate="products in productlist | filter:q | itemsPerPage: pageSize" data-current-page="currentPage">
 					   	<td>{{ $index + 1 }}</td>
-					   	
-					   	<td><span data-editable-text="products.supplierCode" data-e-name="suppliercode" data-e-form="rowform" data-e-style="width: 80px" data-e-disabled="disabled">
-					    {{ products.supplierCode }}</span></td>
-					
-						<td><span data-editable-textarea="products.supplierName" data-e-name="suppliername" data-e-form="rowform" data-e-style="width: 85px; height: 60px" data-e-disabled="disabled">
-					    {{ products.supplierName }}</span></td>
-					
-					    <td><span data-editable-text="products.productCode" data-e-name="pcode" data-e-form="rowform" data-e-style="width: 75px" data-e-disabled="disabled">
-					    {{ products.productCode }}</span></td>
+					    <td><span data-editable-text="products.productCode" data-e-name="pcode" data-e-form="rowform" data-e-style="width: 77px" data-e-disabled="disabled">{{ products.productCode }}</span></td>
 					    
-					    <td><span data-editable-textarea="products.brandName" data-e-name="brandname" data-e-form="rowform" data-e-style="width: 57px;  height: 60px" data-e-disabled="disabled">
-					    {{ products.brandName }} </span></td>
+					    <td><span data-editable-textarea="products.brand" data-e-name="brandname" data-e-form="rowform" data-e-style="width: 60px;  height: 60px">
+					    {{ products.brand }} </span></td>
 					    
-					    <td><span data-editable-textarea="products.productName" data-e-name="productname" data-e-form="rowform" data-e-style="width: 130px; height: 60px" data-e-disabled="disabled">
+					    <td><span data-editable-textarea="products.productName" data-e-name="productname" data-e-form="rowform" data-e-style="width: 190px; height: 60px">
 					    {{ products.productName }} </span></td>
 					    
-					    <td><span data-editable-text="products.buyingPrice" data-e-name="packPrice" data-e-form="rowform" data-e-style="width: 45px">
-					    {{ products.buyingPrice }} </span></td>
+					    <td><span data-editable-text="products.categoryCode" data-e-name="categorycode2" data-e-form="rowform" data-e-style="width: 68px">
+					    {{ products.categoryCode }} </span></td>
+					    
+					    <td><span data-editable-text="products.photoCode" data-e-name="photocode" data-e-form="rowform" data-e-style="width: 100px">
+					    {{ products.photoCode }} </span></td>
+					    
+					   	<td><span data-editable-text="products.unitQuantity" data-e-name="unitquantity" data-e-form="rowform" data-e-style="width: 18px">
+					    {{ products.unitQuantity }} </span></td>
+					    
+					    <td><span data-editable-text="products.packQuantity" data-e-name="packquantity" data-e-form="rowform" data-e-style="width: 18px">
+					    {{ products.packQuantity }} </span></td>
 	
-					    <td><span data-editable-text="products.retailPrice" data-e-name="rrprice" data-ng-model="rrprice" data-e-form="rowform" data-e-style="width: 45px">
-					    {{ products.retailPrice }} </span></td>
+					    <td><span data-editable-text="products.rRPrice" data-e-name="rrprice" data-e-form="rowform" data-e-style="width: 55px">
+					    {{ products.rRPrice }} </span></td>
 					    
-					    <td>{{products.promotionalPrice > 0 ? (products.buyingPrice- products.promotionalPrice)/products.buyingPrice * 100 : 0.00 }} </td>
-					    <td>{{products.promotionalPrice > 0 ? (products.retailPrice- products.promotionalPrice)/products.retailPrice * 100 : 0.00 }} </td>
-					    <td>{{products.promotionalPrice > 0 ? products.retailPrice- products.promotionalPrice : 0.00 }} </td>
-					    
-					    <td><span data-editable-text="products.promotionalPrice" data-e-name="promotionalprice" data-ng-model="promotionalprice" data-e-form="rowform" data-e-style="width: 35px">
-					    {{ products.promotionalPrice }} </span></td>
+					    <td><span data-editable-text="products.discount" data-e-name="discount" data-e-form="rowform" data-e-style="width: 25px">
+					    {{ products.discount }} </span></td>
 					
+					    <td><span data-editable-text="products.packWeight" data-e-name="packweight" data-e-form="rowform" data-e-style="width: 25px">
+					    {{ products.packWeight }} </span></td>
+					    
+					    <td><span data-editable-text="products.packMass" data-e-name="packmass" data-e-form="rowform" data-e-style="width: 40px">
+					    {{ products.packMass }} </span></td>
+					    
+					    <td><span data-editable-text="products.compareWeight" data-e-name="compareweight" data-e-form="rowform" data-e-style="width: 30px">
+					    {{ products.compareWeight }} </span></td>
+					    
+					    <td><span data-editable-text="products.compareMass" data-e-name="comparemass" data-e-form="rowform" data-e-style="width: 40px">
+					    {{ products.compareMass }} </span></td>
+					  
+					    <td><span data-editable-text="products.gst" data-e-name="gst" data-e-form="rowform" data-e-style="width: 15px">
+					    {{ products.gst }} </span></td>
+					    
+	
 					    <td style="white-space: nowrap">
 					    <!-- form -->
 					        <form data-editable-form name="rowform" data-onbeforesave="saveEditedProduct($data)" data-ng-show="rowform.$visible" class="form-buttons form-inline">

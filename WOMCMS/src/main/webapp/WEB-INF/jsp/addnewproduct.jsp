@@ -274,9 +274,9 @@
 		     }
    	     
    	     	$scope.saveNewProduct = function() {
-   	    		if($scope.supplier.selected !== '' || $scope.category.selected.categoryCode !== '' || $scope.gstlist.selected !==  ''){
-	   	    		console.log($scope.supplier.selected );
-	   	    		console.log($scope.category.selected );
+   	    		if($scope.supplier.selected !== '' && $scope.category.selected.categoryCode !== '' 
+   	    				&& $scope.gstlist.selected !==  '' && $scope.product.packweight !== 0){
+   	    			
    	    			var paramsuppliercode= $scope.supplier.selected;
 	   	    		var paramcategorycode = $scope.category.selected; 
 	   	    		
@@ -396,17 +396,17 @@
 			</tr>
 			<tr>
 				<td style="text-align:right" width="310px">Pack Quantity : </td>
-				<td width="100px"><input id="supplierpackqty" name="supplierpackqty" type="number" data-ng-model="product.supplierpackqty" data-ng-init="supplierpackqty='0'" size="10px" min="0" max="1000" required/>
+				<td width="100px"><input id="supplierpackqty" name="supplierpackqty" type="text" data-ng-model="product.supplierpackqty" data-ng-init="supplierpackqty='0'" size="10px" min="0" max="1000" required/>
 					<div role="alert">
 					    <span class="error" data-ng-show="productform.supplierpackqty.$error.required">Pack Quantity is required</span>
-					    <span class="error" data-ng-show="productform.supplierpackqty.$error.number">Please enter a valid number!</span>
+					    <!-- <span class="error" data-ng-show="productform.supplierpackqty.$error.number">Please enter a valid number!</span> -->
 					</div>
 				</td>
 				<td style="text-align:right" width="105px">Pack Unit : </td>
-				<td colspan="3"  width="100px"><input id="packunit" name="packunit" type="number" data-ng-model="product.packunit" data-ng-init="packunit='0'" size="10px" min="0" max="1000" required/>
+				<td colspan="3"  width="100px"><input id="packunit" name="packunit" type="text" data-ng-model="product.packunit" data-ng-init="packunit='0'" size="10px" min="0" max="1000" required/>
 					<div role="alert">
 					    <span class="error" data-ng-show="productform.packunit.$error.required">Pack Unit is required</span>
-					    <span class="error" data-ng-show="productform.packunit.$error.number">Please enter a valid number!</span>
+					    <!--  <span class="error" data-ng-show="productform.packunit.$error.number">Please enter a valid number!</span> -->
 					</div>
 				</td>
 			</tr>
@@ -418,10 +418,10 @@
 					</div>
 				</td>
 				<td style="text-align:right" width="105px">Payment Terms : </td>
-				<td colspan="3"><input id="paymentterms" name="paymentterms" type="number" data-ng-model="product.paymentterms" data-ng-init="paymentterms='1'" size="10px" min="0" max="100" required/>
+				<td colspan="3"><input id="paymentterms" name="paymentterms" type="text" data-ng-model="product.paymentterms" data-ng-init="paymentterms='1'" size="10px" min="0" max="100" required/>
 					<div role="alert">
 					    <span class="error" data-ng-show="productform.paymentterms.$error.required">Payment Terms is required</span>
-					    <span class="error" data-ng-show="productform.paymentterms.$error.number">Please enter a valid number!</span>
+					    <!-- <span class="error" data-ng-show="productform.paymentterms.$error.number">Please enter a valid number!</span>  -->
 					</div>
 				</td>
 			</tr>
@@ -479,17 +479,17 @@
 			</tr>
 			<tr>
 				<td style="text-align:right" width="310px">Unit Quantity : </td>
-				<td width="100px"><input id="unitquantity" name="unitquantity" type="number" data-ng-model="product.unitquantity" data-ng-init="unitquantity='1'" size="10px" min="0" max="100" required/>
+				<td width="100px"><input id="unitquantity" name="unitquantity" type="text" data-ng-model="product.unitquantity" data-ng-init="unitquantity='1'" size="10px" min="0" max="5000" required/>
 					<div role="alert">
 					    <span class="error" data-ng-show="productform.unitquantity.$error.required">Unit Quantity is required</span>
-					    <span class="error" data-ng-show="productform.unitquantity.$error.number">Please enter a valid number!</span>
+					    <!-- <span class="error" data-ng-show="productform.unitquantity.$error.number">Please enter a valid number!</span>  -->
 					</div>
 				</td>
 				<td style="text-align:right" width="105px">Pack Quantity : </td>
-				<td width="100px"><input id="packquantity" name="packquantity" type="number" data-ng-model="product.packquantity" data-ng-init="packquantity='0'" size="10px" min="0" max="100" required/>
+				<td width="100px"><input id="packquantity" name="packquantity" type="text" data-ng-model="product.packquantity" data-ng-init="packquantity='0'" size="10px" min="0" max="5000" required/>
 					<div role="alert">
 					    <span class="error" data-ng-show="productform.packquantity.$error.required">Pack Quantity is required / put 0</span>
-					    <span class="error" data-ng-show="productform.packquantity.$error.number">Please enter a valid number!</span>
+					    <!-- <span class="error" data-ng-show="productform.packquantity.$error.number">Please enter a valid number!</span>  -->
 					</div>
 				</td>
 				<td style="text-align:right" width="110px">RRPrice : </td>
@@ -498,14 +498,13 @@
 					    <span class="error" data-ng-show="productform.rrprice.$error.required">Retail Price is required</span>
 					</div>
 				</td>
-				
 			</tr>
 			<tr>
 				<td style="text-align:right" width="310px">Pack Weight : </td>
-				<td width="100px"><input id="packweight" name="packweight" type="number" data-ng-model="product.packweight" data-ng-init="packweight='0'" size="10px" min="0" max="100" required/>
+				<td width="100px"><input id="packweight" name="packweight" type="text" data-ng-model="product.packweight" data-ng-init="packweight='0'" size="10px" min="0" max="5000" required/>
 					<div role="alert">
 					    <span class="error" data-ng-show="productform.packweight.$error.required">Pack Weight is required</span>
-					    <span class="error" data-ng-show="productform.packweight.$error.number">Please enter a valid number!</span>
+					    <!-- <span class="error" data-ng-show="productform.packweight.$error.number">Please enter a valid number!</span>  -->
 					</div>
 				</td>
 				<td style="text-align:right" width="105px">Pack Mass : </td>
@@ -525,10 +524,10 @@
 			
 			<tr>
 				<td style="text-align:right" width="310px">Compare Weight : </td>
-				<td width="100px"><input id="compareweight" name="compareweight" type="number" data-ng-model="product.compareweight" data-ng-init="compareweight='0'" size="10px" min="1" max="100" required/>
+				<td width="100px"><input id="compareweight" name="compareweight" type="text" data-ng-model="product.compareweight" data-ng-init="compareweight='0'" size="10px" min="0" max="5000" required/>
 					<div role="alert">
 					    <span class="error" data-ng-show="productform.compareweight.$error.required">Compare Weight is required</span>
-					    <span class="error" data-ng-show="productform.compareweight.$error.number">Please enter a valid number!</span>
+					    <!--  <span class="error" data-ng-show="productform.compareweight.$error.number">Please enter a valid number!</span> -->
 					</div>
 				</td>
 				<td style="text-align:right" width="105px">Compare Mass : </td>
@@ -538,49 +537,49 @@
 	   	 			</select>
 				</td>
 				<td style="text-align:right" width="110px">Checkout Weight : </td>
-				<td><input id="checkoutweight" name="checkoutweight" type="number" data-ng-model="product.checkoutweight" data-ng-init="checkoutweight='0'" size="10px" min="0" max="100" required/>
+				<td><input id="checkoutweight" name="checkoutweight" type="text" data-ng-model="product.checkoutweight" data-ng-init="checkoutweight='0'" size="10px" min="0" max="5000" required/>
 					<div role="alert">
 					    <span class="error" data-ng-show="productform.checkoutweight.$error.required">Checkout Weight is required</span>
-					    <span class="error" data-ng-show="productform.checkoutweight.$error.number">Please enter a valid number!</span>
+					    <!-- <span class="error" data-ng-show="productform.checkoutweight.$error.number">Please enter a valid number!</span>  -->
 					</div>
 				</td>
 				
 			</tr>
 			<tr>
 				<td style="text-align:right" width="310px">Discount : </td>
-				<td width="100px"><input id="discount" name="discount" type="number" data-ng-model="product.discount" data-ng-init="discount='0'" size="10px" min="0" max="100" required/>
+				<td width="100px"><input id="discount" name="discount" type="text" data-ng-model="product.discount" data-ng-init="discount='0'" size="10px" min="0" max="5000" required/>
 					<div role="alert">
 					    <span class="error" data-ng-show="productform.discount.$error.required">Discount is required or put 0</span>
-					    <span class="error" data-ng-show="productform.discount.$error.number">Please enter a valid number!</span>
+					    <!-- <span class="error" data-ng-show="productform.discount.$error.number">Please enter a valid number!</span>  -->
 					</div>
 				</td>
 				<td style="text-align:right" width="105px">Inventory Level  : </td>
-				<td width="100px"><input id="inventorylevel" name="inventorylevel" type="number" data-ng-model="product.inventorylevel" data-ng-init="inventorylevel='350'" size="10px" min="0" max="350" required/>
+				<td width="100px"><input id="inventorylevel" name="inventorylevel" type="text" data-ng-model="product.inventorylevel" data-ng-init="inventorylevel='350'" size="10px" min="0" max="5000" required/>
 					<div role="alert">
 					    <span class="error" data-ng-show="productform.inventorylevel.$error.required">Inventory Level is required or put 350</span>
-					    <span class="error" data-ng-show="productform.inventorylevel.$error.number">Please enter a valid number!</span>
+					    <!-- <span class="error" data-ng-show="productform.inventorylevel.$error.number">Please enter a valid number!</span> -->
 					</div>
 				</td>
 				<td style="text-align:right" width="110px">Stock Level Days : </td>
-				<td><input id="stockleveldays" name="stockleveldays" type="number" data-ng-model="product.stockleveldays" data-ng-init="stockleveldays='100'" size="10px" min="0" max="500" required/>
+				<td><input id="stockleveldays" name="stockleveldays" type="text" data-ng-model="product.stockleveldays" data-ng-init="stockleveldays='100'" size="10px" min="0" max="5000" required/>
 					<div role="alert">
 					    <span class="error" data-ng-show="productform.stockleveldays.$error.required">Stock Level Days is required or put 100</span>
-					    <span class="error" data-ng-show="productform.stockleveldays.$error.number">Please enter a valid number!</span>
+					    <!-- <span class="error" data-ng-show="productform.stockleveldays.$error.number">Please enter a valid number!</span>  -->
 					</div>
 				</td>
 			</tr>
 			<tr>
 		        <td style="text-align:right" width="310px">Keep Fresh: </td>
-				<td width="100px"><input id="keepfresh" name="keepfresh" type="number" data-ng-model="product.keepfresh" data-ng-init="keepfresh='0'" size="10px" min="0" max="100" required/>
+				<td colspan="5"><input id="keepfresh" name="keepfresh" type="text" data-ng-model="product.keepfresh" data-ng-init="keepfresh='0'" size="10px" min="0" max="100" required/>
 					<div role="alert">
 					    <span class="error" data-ng-show="productform.keepfresh.$error.required">Keep Fresh is required or put 0</span>
-					    <span class="error" data-ng-show="productform.keepfresh.$error.number">Please enter a valid number!</span>
+					    <!-- <span class="error" data-ng-show="productform.keepfresh.$error.number">Please enter a valid number!</span> -->
 					</div>
 				</td>
-			    <td style="text-align:right" width="105px">Description: </td>
-				<td colspan="3" ><input id="description" name="description" type="text" data-ng-model="product.description" data-ng-init="description='-'" size="52px"/></td>
+			<tr>
+			    <td style="text-align:right" width="310px">Description: </td>
+				<td colspan="5" ><textarea id="description" name="description" data-ng-model="product.description" data-ng-init="description='-'" style="width:500px; height:200px; font-family:Arial, MS Sans Serif, Verdana; font-size:12px;" ></textarea></td>
 			</tr>
-			
 			<tr>
 			</tr>
 			<tr>

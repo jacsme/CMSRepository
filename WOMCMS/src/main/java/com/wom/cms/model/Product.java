@@ -47,6 +47,7 @@ public class Product implements Serializable{
 		this.keepFresh = keepfresh;
 		this.description = description;
 		this.active = "YES";
+		this.promotionalPrice = "0";
 		
 		DateTime dateTimeKL = DateTime.now( DateTimeZone.forID("Asia/Kuala_Lumpur"));
 		String currdatenow = HelperUtil.checkNullTimeZone(dateTimeKL);

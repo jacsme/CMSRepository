@@ -45,6 +45,13 @@ public class ProductController {
 		return "productpromotional1";
 	}
 	
+	@RequestMapping(value="/productpromotional2", method = RequestMethod.GET)
+	public String getProductPromotional2GET(ModelMap model) {
+		logger.info("Received request to show getProductPromotional2GET GET");
+		model.addAttribute("message", "Welcome");
+		return "productpromotional2";
+	}
+	
 	@RequestMapping(value="/addnewproductpage", method = RequestMethod.GET)
 	public String getaddnewproductspageGET(ModelMap model) {
 		logger.info("Received request to show add new products page GET");
@@ -257,7 +264,18 @@ public class ProductController {
 	public @ResponseBody List<Product> submitNewProduct(@RequestBody AddProductSupplierVO addproductsuppliervo			
 			) throws Exception {
 			
-		logger.info("Received request to show submitNewProduct POST");
+		logger.info("POST -- submitNewProduct / " + addproductsuppliervo.getSupplierCode() + "/" +
+				addproductsuppliervo.getSupplierPackqty() + "/" + addproductsuppliervo.getPackUnit() + "/" +
+				addproductsuppliervo.getPackPrice() + "/" + addproductsuppliervo.getPaymentTerms() + "/" + 
+				addproductsuppliervo.getStoreCode() + "/" + addproductsuppliervo.getCategoryCode() + "/" + addproductsuppliervo.getBrandName() + "/" + 
+				addproductsuppliervo.getProductName() + "/" + addproductsuppliervo.getBarcode() + "/" + 
+				addproductsuppliervo.getUnitQuantity() + "/" + addproductsuppliervo.getPackQuantity() + "/" + 
+				addproductsuppliervo.getrRPrice() + "/" + addproductsuppliervo.getPackWeight() + "/" + 
+				addproductsuppliervo.getPackMass() + "/" + addproductsuppliervo.getGst() + "/" + 
+				addproductsuppliervo.getCompareWeight() + "/" + addproductsuppliervo.getCompareMass() + "/" + 
+				addproductsuppliervo.getCheckoutWeight() + "/" + addproductsuppliervo.getDiscount() + "/" + 
+				addproductsuppliervo.getInventoryLevel() + "/" + addproductsuppliervo.getStockLevelDays() + "/" + 
+				addproductsuppliervo.getKeepFresh() + "/" + addproductsuppliervo.getDescription());
 		
 		List<Product> saveproductsupplier = null;
 		try{

@@ -16,6 +16,7 @@
 	<h1>Content Management System</h1>
 	<c:url var="password" value="/wom/cms/password"/>
 	<c:url var="productpromotional1" value="/wom/cms/productpromotional1"/>
+	<!--<c:url var="productpromotional2" value="/wom/cms/productpromotional2"/> -->
 	<c:url var="amendproducts" value="/wom/cms/amendproducts"/>
 	<c:url var="purchaseorders" value="/wom/cms/purchaseorders"/>
 	<c:url var="salesorder" value="/wom/cms/salesorder"/>
@@ -23,7 +24,11 @@
 	<c:url var="otherdetails" value="/wom/cms/otherdetails"/>
 	<c:url var="addnewproduct" value="/wom/cms/addnewproductpage"/>
 	<c:url var="addnewsupplier" value="/wom/cms/addnewsupplierpage"/>
+	<c:url var="inventorysummary" value="/wom/cms/inventorysummary"/>
+	<c:url var="salessummary" value="/wom/cms/salessummary"/>
+	<c:url var="editsupplierproduct" value="/wom/cms/editsupplierproductpage"/>
 	<c:url var="logout" value="/wom/cms/login"/>
+	<c:url var="uploading" value="/wom/cms/uploadimages"/>
 	<nav>
 		<ul>
 			<li>
@@ -49,13 +54,17 @@
 							<li><a href="${otherdetails}">Edit Other Details</a></li>
 						</ul>
 					</li>
-					
 				</ul>
 			</li>
 			<li><a href="#">Supplier</a>
 				<ul>
 					<li><a href="${addnewsupplier}">Add New Supplier</a></li>
-					<li><a href="#">Edit Supplier's Product</a></li>
+					<li><a href="${editsupplierproduct}">Edit Supplier's Product</a></li>
+				</ul>
+			</li>
+			<li><a href="#">Summary</a>
+				<ul>
+					<li><a href="${inventorysummary}">Inventory</a></li>
 				</ul>
 			</li>
 			<li><a href="${logout}">Log Out</a></li>

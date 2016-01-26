@@ -12,5 +12,7 @@ public interface FactoryEntityService<H> {
 	public List<H> getEntityProductSupplier(String productcode, Session session) throws Exception;
 	public H getEntitySupplier(String suppliercode, Session session) throws Exception;
 	public List<H> getCategoryEntityList(Session session) throws Exception;
+	public List<H> getEntityProductSupplier(String suppliercode, String productcode, Session session) throws Exception;
+	public List<H> getEntityInventory(String productcode, Session session) throws Exception;
 }
 	

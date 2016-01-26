@@ -49,7 +49,7 @@
     
     .processing {  
 	    position:absolute;
-	    top:500px;
+	    top:350px;
 	    left:620px;
 	    width:100px;
 	    height:100px;
@@ -148,12 +148,19 @@
    	     	$scope.saveNewSupplier = function() {
  	   		    
    	     		$scope.loading = true;
-   	            $http.post('submitNewSupplier/' +  $scope.supplier.suppliername + '/'
-   	            		+ $scope.supplier.address + '/' + $scope.supplier.phone + '/'
-   	            		+ $scope.supplier.fax + '/' + $scope.supplier.website + '/'
-   	            		+ $scope.supplier.email + '/' + $scope.supplier.contactperson + '/' + $scope.supplier.gstid + '/' 
-   	            		+ $scope.supplier.contactnumber + '/' )
-   	            		
+   	     		var formdata = {
+   	    			"supplierName": $scope.supplier.suppliername,
+   	    			"address" : $scope.supplier.address,
+   	    			"phone" : $scope.supplier.phone,
+   	    			"fax" : $scope.supplier.fax,
+   	    			"website" : $scope.supplier.website,
+   	    			"email": $scope.supplier.email,
+   	    			"contactPerson": $scope.supplier.contactperson,
+   	    			"gstID": $scope.supplier.gstid,
+   	    			"contactPersonPhone": $scope.supplier.contactnumber
+		        };
+   	    		
+		        $http.post("submitNewSupplier", formdata)
    	            .success(function(data, status, headers, config) {
    	            	jdlog("#dialog-success").dialog("open").html("Successfully saved the supplier");
    	            	$scope.loading = false;
@@ -209,66 +216,36 @@
 			</tr>
 			<tr>
 				<td style="text-align:right" width="210px">Address : </td>
-				<td width="450px"><input id="address" name="address" type="text" data-ng-model="supplier.address" data-ng-init="address='-'" size="100px" required/>
-					<div role="alert">
-					    <span class="error" data-ng-show="supplierform.address.$error.required">Address is required</span>
-					</div>
-				</td>
+				<td width="450px"><input id="address" name="address" type="text" data-ng-model="supplier.address" data-ng-init="address='-'" size="100px" /></td>
 			</tr>
 			<tr>
 				<td style="text-align:right" width="210px">Phone : </td>
-				<td width="450px"><input id="phone" name="phone" type="number" data-ng-model="supplier.phone" data-ng-init="phonet='0'" size="30px" required/>
-					<div role="alert">
-					    <span class="error" data-ng-show="supplierform.phone.$error.required">Phone is required</span>
-					    <span class="error" data-ng-show="supplierform.phone.$error.number">Please enter a valid number!</span>
-					</div>
-				</td>
+				<td width="450px"><input id="phone" name="phone" type="text" data-ng-model="supplier.phone" data-ng-init="phone='0'" size="30px"/></td>
 			</tr>
 			<tr>	
 				<td style="text-align:right" width="210px">Fax : </td>
-			<td width="450px"><input id="fax" name="fax" type="number" data-ng-model="supplier.fax" data-ng-init="fax='0'" size="30px" required/>
-					<div role="alert">
-					    <span class="error" data-ng-show="supplierform.fax.$error.required">Fax is required</span>
-					    <span class="error" data-ng-show="supplierform.fax.$error.number">Please enter a valid amount!</span>
-					</div>
-				</td>
+				<td width="450px"><input id="fax" name="fax" type="text" data-ng-model="supplier.fax" data-ng-init="fax='0'" size="30px"/></td>
 			</tr>
 			<tr>
 				<td style="text-align:right" width="210px">Website : </td>
-				<td width="450px"><input id="website" name="website" type="text" data-ng-model="supplier.website" data-ng-init="website='-'" size="100px"/>
-				</td>
+				<td width="450px"><input id="website" name="website" type="text" data-ng-model="supplier.website" data-ng-init="website='-'" size="100px"/></td>
 			</tr>
 	        <tr>
 	        	<td style="text-align:right" width="210px">Contact Person : </td>
-				<td width="450px"><input id="contactperson" name="contactperson" type="text" data-ng-model="supplier.contactperson" size="100px" required />
-					<div role="alert">
-					    <span class="error" data-ng-show="supplierform.contactperson.$error.required">Contact Person is required</span>
-					</div>
-				</td>
+				<td width="450px"><input id="contactperson" name="contactperson" type="text" data-ng-model="supplier.contactperson" data-ng-init="contactperson='-'" size="100px" /></td>
 	        </tr>
 	        <tr>
 		        <td style="text-align:right" width="210px">Contact Number : </td>
-				<td width="450px"><input id="contactnumber" name="contactnumber" type="number" data-ng-model="supplier.contactnumber" size="30px" required/>
-					<div role="alert">
-					    <span class="error" data-ng-show="supplierform.contactnumber.$error.required">Contact Number is required</span>
-					    <span class="error" data-ng-show="supplierform.contactnumber.$error.number">Please enter a valid number!</span>
-					</div>
-				</td>
+				<td width="450px"><input id="contactnumber" name="contactnumber" type="text" data-ng-model="supplier.contactnumber" data-ng-init="contactnumber='-'" size="30px" /></td>
 			</tr>
 			<tr>
 				<td style="text-align:right" width="210px">Email : </td>
-				<td width="450px"><input id="email" name="email" type="text" data-ng-model="supplier.email" size="100px" required/>
-					<div role="alert">
-					    <span class="error" data-ng-show="supplierform.email.$error.required">Email is required</span>
-					</div>
+				<td width="450px"><input id="email" name="email" type="text" data-ng-model="supplier.email" size="100px" data-ng-init="email='-'"/>
 				</td>
 			</tr>
 			<tr>
 				<td style="text-align:right" width="210px">GST ID : </td>
-				<td width="450px"><input id="gstid" name="gstid" type="number" data-ng-model="supplier.gstid" data-ng-init="gstid='0'" size="100px"/>
-					<div role="alert">
-					    <span class="error" data-ng-show="supplierform.gstid.$error.number">Please enter a valid number!</span>
-					</div>
+				<td width="450px"><input id="gstid" name="gstid" type="text" data-ng-model="supplier.gstid" data-ng-init="gstid='0'" size="100px"/>
 				</td>
 			<tr>
 		        <td colspan="2" style="text-align:center">

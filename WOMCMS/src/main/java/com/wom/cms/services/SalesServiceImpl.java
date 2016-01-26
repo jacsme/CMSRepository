@@ -12,9 +12,9 @@ public class SalesServiceImpl implements SalesService{
 	SalesDao salesDao;
 	
 	@Override
-	public List<SalesOrderVO> searchSalesOrder(String salesordercode, String custumercode, String dateordered)
+	public List<SalesOrderVO> searchSalesOrder(String salesordercode, String custumercode, String datedelivered)
 			throws Exception {
-		return salesDao.searchSalesOrder(salesordercode, custumercode, dateordered);
+		return salesDao.searchSalesOrder(salesordercode, custumercode, datedelivered);
 	}
 
 }

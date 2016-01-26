@@ -109,10 +109,12 @@ public class QueriesString {
 			+ " A.QUANTITY, A.PRICE, A.CUSTOMERCODE, A.STATUS FROM tblcustomercart A "
 			+ " INNER JOIN tblproduct B ON A.PRODUCTCODE = B.PRODUCTCODE LEFT JOIN tblproductimage C "
 			+ " ON B.PRODUCTCODE = C.PRODUCTCODE INNER JOIN tblstore D ON B.STORECODE = D.STORECODE ";
-	public static final String supplierListQuery = " SELECT A.SUPPLIERCODE, A.SUPPLIERNAME, A.ADDRESS, A.PHONE, "
-			+ " A.FAX, A.WEBSITE, A.CONTACTPERSON, A.SUPPLIERGSTID, A.EMAIL, A.CONTACTPERSONPHONE, B.FILENAME, B.FILETYPE "
-			+ " FROM tblsupplier A LEFT JOIN tblimages B ON A.SUPPLIERCODE = B.CODE "
-			+ " INNER JOIN tblproductsupplier C ON C.SUPPLIERCODE=A.SUPPLIERCODE ";
+	public static final String supplierListQuery = " SELECT A.SUPPLIERCODE, A.SUPPLIERNAME, D.PRODUCTCODE, D.PRODUCTNAME, "
+			+ " C.PACKUNIT, C.PACKPRICE, C.PAYMENTTERMS, D.PACKWEIGHT, D.PACKMASS, D.GST "
+			+ " FROM tblsupplier A "
+			+ " LEFT JOIN tblimages B ON A.SUPPLIERCODE = B.CODE "
+			+ " INNER JOIN tblproductsupplier C ON C.SUPPLIERCODE=A.SUPPLIERCODE "
+			+ " INNER JOIN tblproduct D ON D.PRODUCTCODE = C.PRODUCTCODE";
 	public static final String searchsupplierQuery = " SELECT A.SUPPLIERCODE, A.SUPPLIERNAME, A.ADDRESS, A.PHONE, "
 			+ " A.FAX, A.WEBSITE, A.CONTACTPERSON, A.SUPPLIERGSTID, A.EMAIL, A.CONTACTPERSONPHONE, B.FILENAME, B.FILETYPE FROM tblsupplier A LEFT JOIN tblimages B ON A.SUPPLIERCODE = B.CODE ";
 	public static final String checkpostcodeQuery = " SELECT A.POSTCODE FROM tbldeliverycoverage A ";
@@ -448,6 +450,10 @@ public class QueriesString {
 			+ " A.PAYMENTTYPE, A.CARDNUMBER, A.RECHARGEDATE ";
 	public static final String voucherredeemedGroupby = "GROUP BY D.CUSTOMERCODE, D.VOUCHERNUMBER, D.AMOUNT, D.REDEEMEDDATE ";
 	public static final String checkpostcodeGroupby = " GROUP BY A.POSTCODE ";
+	public static final String supplierlistGroupby = " GROUP BY A.SUPPLIERCODE, A.SUPPLIERNAME, A.ADDRESS, A.PHONE, "
+			+ " A.FAX, A.WEBSITE, A.CONTACTPERSON, A.SUPPLIERGSTID, A.EMAIL, A.CONTACTPERSONPHONE, B.FILENAME, B.FILETYPE, "
+			+ " C.PACKUNIT, C.PACKPRICE, C.PAYMENTTERMS, D.PACKWEIGHT, D.PACKMASS, D.GST ";
+
 			
 	/** Order by **/
 	public static final String productOrderby = " ORDER BY B.PRODUCTNAME ";
@@ -492,7 +498,7 @@ public class QueriesString {
 	public static final String salesorderWhere = " WHERE A.STORECODE=:storecode AND A.JOBID =:jobid AND (A.STATUS = 'New Order') AND (B.BOXCODE IS NULL OR B.BOXCODE = '-' OR B.BOXCODE = '')";
 	public static final String deliveryWhere = " WHERE A.STATUS = 'Scanned'";
 	public static final String customercartWhere = " WHERE A.CUSTOMERCODE =:customercode AND A.STATUS = 'ACTIVE' ";
-	public static final String supplierListWhere = " WHERE A.ACTIVE = 'YES' AND C.PRODUCTCODE =:productcode "; //B.IMAGEFOR = 'Supplier' AND 
+	public static final String supplierListWhere = " WHERE A.ACTIVE = 'YES' AND C.SUPPLIERCODE =:suppliercode "; //B.IMAGEFOR = 'Supplier' AND 
 	public static final String checkpostcodeWhere = " WHERE A.POSTCODE =:postcode and A.ACTIVE = 'YES' ";
 	public static final String mailboxWhere = " WHERE A.CUSTOMERCODE=:customercode ";
 	public static final String reportsubcategoryWhere = " WHERE A.CATEGORYNAME =:categoryname";

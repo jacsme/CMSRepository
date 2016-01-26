@@ -71,7 +71,6 @@
     		
         	$http.get('searchProductCode/' + encodeURIComponent($scope.productcode) + '/' + encodeURIComponent($scope.brand) + '/' + encodeURIComponent($scope.categorycode))
             .success(function(data, status, headers, config) {
-            	console.log("search >> " + data);
             	$scope.productlist = data;
             	$scope.loading = false;
             })

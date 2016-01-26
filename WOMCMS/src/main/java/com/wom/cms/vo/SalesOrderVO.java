@@ -16,6 +16,7 @@ public class SalesOrderVO implements Serializable{
 	private String womCoin;
 	private String purchaseAmount;
 	private String status;
+	private String staffCode;
 	
 	public String getSalesOrderCode() {
 		return salesOrderCode;
@@ -86,6 +87,14 @@ public class SalesOrderVO implements Serializable{
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getStaffCode() {
+		return staffCode;
+	}
+
+	public void setStaffCode(String staffCode) {
+		this.staffCode = staffCode;
 	}
 	
 	

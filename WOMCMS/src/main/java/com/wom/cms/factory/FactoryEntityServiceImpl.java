@@ -8,9 +8,10 @@ import org.hibernate.criterion.Restrictions;
 
 import com.wom.cms.constant.MainEnum;
 
+@SuppressWarnings("unchecked")
 public class FactoryEntityServiceImpl<H> implements FactoryEntityService<H>{
 	
-	@SuppressWarnings("unchecked")
+
 	@Override
 	public H getEntity(MainEnum mainenum, String param, Session session) throws Exception{
 		
@@ -29,7 +30,7 @@ public class FactoryEntityServiceImpl<H> implements FactoryEntityService<H>{
 		return resultentity;
 	}
 	
-	@SuppressWarnings("unchecked")
+
 	@Override
 	public List<H> getEntityProductList(MainEnum mainenum, String productcode, String brand, String categorycode, Session session) throws Exception{
 		Criteria criteria = null;
@@ -55,7 +56,7 @@ public class FactoryEntityServiceImpl<H> implements FactoryEntityService<H>{
 		return resultentitylist;
 	}
 	
-	@SuppressWarnings("unchecked")
+
 	@Override
 	public List<H> getEntityProductSupplier(String productcode, Session session) throws Exception{
 		List<H> resultentitylist = null;
@@ -70,6 +71,20 @@ public class FactoryEntityServiceImpl<H> implements FactoryEntityService<H>{
 	
 	@SuppressWarnings("unchecked")
 	@Override
+	public List<H> getEntityProductSupplier(String suppliercode, String productcode, Session session) throws Exception{
+		List<H> resultentitylist = null;
+		
+		Class<?> cls = Class.forName("com.wom.cms.model.ProductSupplier");
+		resultentitylist = (List<H>) session.createCriteria(cls)
+				.add(Restrictions.eq("supplierCode", suppliercode))
+				.add(Restrictions.eq("productCode", productcode))
+				.list();
+		
+		return resultentitylist;
+	}
+	
+	
+	@Override
 	public List<H> getCategoryEntityList(Session session) throws Exception{
 		List<H> resultentitylist = null;
 		
@@ -80,7 +95,7 @@ public class FactoryEntityServiceImpl<H> implements FactoryEntityService<H>{
 		return resultentitylist;
 	}
 	
-	@SuppressWarnings("unchecked")
+
 	@Override
 	public H getEntitySupplier(String suppliercode, Session session) throws Exception{
 		H resultentitylist = null;
@@ -89,6 +104,18 @@ public class FactoryEntityServiceImpl<H> implements FactoryEntityService<H>{
 		resultentitylist = (H) session.createCriteria(cls)
 				.add(Restrictions.eq("supplierCode", suppliercode))
 				.uniqueResult();
+		
+		return resultentitylist;
+	}
+
+	@Override
+	public List<H> getEntityInventory(String productcode, Session session) throws Exception {
+		List<H> resultentitylist = null;
+		
+		Class<?> cls = Class.forName("com.wom.cms.model.Inventory");
+		resultentitylist = (List<H>) session.createCriteria(cls)
+				.add(Restrictions.eq("productCode", productcode))
+				.list();
 		
 		return resultentitylist;
 	}

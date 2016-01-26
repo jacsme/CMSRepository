@@ -77,9 +77,9 @@
     		
     		if($scope.salesordercode === ''){ $scope.salesordercode = '-'}
     		if($scope.customercode === ''){ $scope.customercode = '-'}
-    		if($scope.dateordered === ''){ $scope.dateordered = '-'}
+    		if($scope.datedelivered === ''){ $scope.datedelivered = '-'}
     		
-        	$http.get('searchSalesOrder/' + $scope.salesordercode + '/' + $scope.customercode + '/' + $scope.dateordered)
+        	$http.get('searchSalesOrder/' + $scope.salesordercode + '/' + $scope.customercode + '/' + $scope.datedelivered)
             .success(function(data, status, headers, config) {
             	console.log('Sales Order List' +data);
             	
@@ -151,14 +151,14 @@
 				<td><input id="customercode" name="customercode" type="text" data-ng-model="customercode" data-ng-init="customercode='-'" size="70px"/></td>
 			</tr>
 			<tr>
-		        <td style="text-align:right" width="390px">Date Ordered : </td>
+		        <td style="text-align:right" width="390px">Date Delivered : </td>
 				<td>
 				<div class="datepicker"
 				     data-date-format="yyyy-MM-dd"
 				     
 				     data-button-prev='<i class="fa fa-arrow-circle-left"></i>'
 				     data-button-next='<i class="fa fa-arrow-circle-right"></i>'>
-      				 <input class="angular-datepicker-input" id="dateordered" name="dateordered" type="text" data-ng-model="dateordered" data-ng-init="dateordered='-'" min="{{date | date: 'yyyy-MM-dd'}}" size="40px"/>
+      				 <input class="angular-datepicker-input" id="datedelivered" name="datedelivered" type="text" data-ng-model="datedelivered" data-ng-init="datedelivered='-'" min="{{date | date: 'yyyy-MM-dd'}}" size="40px"/>
     			</div>
 			</td>	
 			</tr>
@@ -205,6 +205,7 @@
 						<th>Delivery Time</th>
 						<th>WOM Coin</th>
 						<th>Purchase Amount</th>
+						<th>Processed By</th>
 						<th>Status</th>
 					</tr>
 				</thead>
@@ -219,6 +220,7 @@
 					    <td>{{ salesorder.deliveryTime }}</td>
 					    <td>{{ salesorder.womCoin }}</td>
 					    <td>{{ salesorder.purchaseAmount }}</td>
+					    <td>{{ salesorder.staffCode }}</td>
 					    <td>{{ salesorder.status }}</td>
 					 </tr>
 				</tbody>
