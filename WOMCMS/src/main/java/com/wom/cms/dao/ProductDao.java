@@ -6,7 +6,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.wom.cms.model.Category;
 import com.wom.cms.model.Product;
-import com.wom.cms.vo.POSupplierVO;
 import com.wom.cms.vo.ProductSupplierVO;
 
 public interface ProductDao {
@@ -23,7 +22,6 @@ public interface ProductDao {
 			 String categorycode, String barcode,  String stockleveldays, String checkoutweight, 
 			 String inventorylevel, String description, String keepfresh, String active) throws Exception;
 
-	public List<POSupplierVO> searchPurchaseOrder(String purchaseordercode, String suppliername, String dateissued) throws Exception;
 	public List<Product> updatepromotional1(String productcode, String retailprice, String discount,
 			String discountamount, String promotionalprice) throws Exception;
 	public List<ProductSupplierVO> searchPromoProducts(String productcode, String brand, String categorycode) throws Exception;

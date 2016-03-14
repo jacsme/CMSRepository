@@ -1,7 +1,6 @@
 package com.wom.cms.dao;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -22,7 +21,6 @@ public class SalesDaoImpl implements SalesDao{
 	
 	@Resource(name="sessionFactory")
 	private SessionFactory sessionFactory;
-	Session session; 
 	
 	static final Logger logger = Logger.getLogger(SalesDaoImpl.class);
 	
@@ -34,9 +32,8 @@ public class SalesDaoImpl implements SalesDao{
 		
 		StringBuffer stringcriteria = new StringBuffer();
 		Query criteria = null;
-		
+		Session session = sessionFactory.openSession();
 		try {
-			session = sessionFactory.openSession();
 			if (!salesordercode.equalsIgnoreCase("-")) {	stringcriteria.append(" AND A.SALESORDERCODE =:salesordercode"); }
 			if (!custumercode.equalsIgnoreCase("-")) { stringcriteria.append(" AND A.CUSTOMERCODE like :custumercode");}
 			if (!datedelivered.equalsIgnoreCase("-")) { stringcriteria.append(" AND DATE(A.DELIVERYDATE) =:datedelivered");}

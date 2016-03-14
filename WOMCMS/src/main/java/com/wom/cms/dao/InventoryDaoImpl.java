@@ -15,7 +15,6 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wom.cms.constant.MainEnum;
 import com.wom.cms.factory.FactoryEntityService;
 import com.wom.cms.factory.FactoryEntityServiceImpl;
 import com.wom.cms.model.AuditTrail;
@@ -25,13 +24,11 @@ import com.wom.cms.util.HelperUtil;
 import com.wom.cms.util.HibernateUtil;
 import com.wom.cms.util.ResultGeneratorUtil;
 import com.wom.cms.vo.InventorySummaryVO;
-import com.wom.cms.vo.SalesOrderVO;
 @Transactional
 public class InventoryDaoImpl implements InventoryDao {
 	
 	@Resource(name="sessionFactory")
 	private SessionFactory sessionFactory;
-	Session session; 
 	
 	static final Logger logger = Logger.getLogger(InventoryDaoImpl.class);
 	
@@ -50,10 +47,10 @@ public class InventoryDaoImpl implements InventoryDao {
 		try {
 			if (!productcode.equalsIgnoreCase("-")) {stringcriteria.append(" AND A.PRODUCTCODE =:productcode "); }
 			if (!stocklevel.equalsIgnoreCase("-")) {
-				if(stocklevel.equalsIgnoreCase("Units on Hand")){
-					stringcriteria.append(" AND AVAILABLESTOCKQTY >:availablestock ");
-				}else if (stocklevel.equalsIgnoreCase("Unit Finished")){
-					stringcriteria.append(" AND AVAILABLESTOCKQTY =:availablestock ");
+				if(stocklevel.equalsIgnoreCase("Stocks on Hand")){
+					stringcriteria.append(" AND AVAILABLESTOCKQTY2 >:availablestock ");
+				}else if (stocklevel.equalsIgnoreCase("Stocks Finished")){
+					stringcriteria.append(" AND AVAILABLESTOCKQTY2 =:availablestock ");
 				}
 			}
 			if (!stocklocation.equalsIgnoreCase("-")) {stringcriteria.append(" AND A.STOCKLOCATION =:stocklocation ");}
@@ -61,20 +58,24 @@ public class InventoryDaoImpl implements InventoryDao {
 			if(stringcriteria.length() != 0){
 				query = session.createSQLQuery(" SELECT DATE(G.TDATE) AS TDATE,  A.PRODUCTCODE, E.BRAND, E.PRODUCTNAME, E.PACKWEIGHT, E.PACKMASS, "
 						+ " A.STOCKLOCATION, F.REQUESTPACKINGPRICE/F.RequestUnit AS PACKINGPRICE, E.RRPRICE, "  
-						+ " (((SUM(A.POUNIT)/E.UNITQUANTITY) + SUM(A.PORETURNUNIT)) - (SUM(A.SOUNIT) - SUM(A.SORETURNUNIT)))  AS AVAILABLESTOCKQTY, "
-						+ " IFNULL(E.PHOTO, 'NO') AS PHOTO FROM tblinventory A INNER JOIN ( SELECT MAX(TransactionDate) AS TDATE, PRODUCTCODE "
-						+ " FROM tblinventory GROUP BY PRODUCTCODE) G ON G.ProductCode = A.PRODUCTCODE INNER JOIN tblproduct E ON A.ProductCode = E.ProductCode "
+						+ " IF((((SUM(A.POUNIT)/E.UNITQUANTITY)) - (SUM(A.SOUNIT) - SUM(A.SORETURNUNIT)))<1, 0,(((SUM(A.POUNIT)/E.UNITQUANTITY)) - (SUM(A.SOUNIT) - SUM(A.SORETURNUNIT))))  AS AVAILABLESTOCKQTY, "
+						+ " IF((((SUM(A.POUNIT)/E.UNITQUANTITY) - SUM(A.PORETURNUNIT)) - (SUM(A.SOUNIT) - SUM(A.SORETURNUNIT)))<1, 0,(((SUM(A.POUNIT)/E.UNITQUANTITY)- SUM(A.PORETURNUNIT)) - (SUM(A.SOUNIT) - SUM(A.SORETURNUNIT))))  AS AVAILABLESTOCKQTY2, "
+						+ " IFNULL(E.PHOTO, 'NO') AS PHOTO, SUM(A.PORETURNUNIT) AS PORETURNUNIT, H.COMMENTS FROM tblinventory A INNER JOIN ( SELECT MAX(TransactionDate) AS TDATE, PRODUCTCODE "
+						+ " FROM tblinventory WHERE INVENTORYSOURCE = 'GR' GROUP BY PRODUCTCODE) G ON G.ProductCode = A.PRODUCTCODE INNER JOIN tblproduct E ON A.ProductCode = E.ProductCode "
 						+ " LEFT JOIN tblpurchaserequest F ON F.PURCHASEORDERCODE = A.SOURCECODE AND F.PRODUCTCODE = A.ProductCode "
-						+ " GROUP BY G.TDATE, A.STOCKLOCATION, A.PRODUCTCODE, E.PHOTO HAVING LENGTH(A.STOCKLOCATION) = 9 "
+						+ " LEFT JOIN (SELECT MAX(TransactionDate) AS TDATE, PRODUCTCODE, COMMENTS FROM tblinventory WHERE InventorySource = 'RTS' GROUP BY PRODUCTCODE, COMMENTS) H ON H.PRODUCTCODE = A.PRODUCTCODE "
+						+ " GROUP BY G.TDATE, A.STOCKLOCATION, A.PRODUCTCODE, E.PHOTO, H.COMMENTS HAVING LENGTH(A.STOCKLOCATION) = 9 "
 						+ stringcriteria.toString() + " ORDER BY G.TDATE ");
 			}else{
 				query = session.createSQLQuery(" SELECT DATE(G.TDATE) AS TDATE,  A.PRODUCTCODE, E.BRAND, E.PRODUCTNAME, E.PACKWEIGHT, E.PACKMASS, "
 						+ " A.STOCKLOCATION, F.REQUESTPACKINGPRICE/F.RequestUnit AS PACKINGPRICE, E.RRPRICE, "  
-						+ " (((SUM(A.POUNIT)/E.UNITQUANTITY) + SUM(A.PORETURNUNIT)) - (SUM(A.SOUNIT) - SUM(A.SORETURNUNIT)))  AS AVAILABLESTOCKQTY, "
-						+ " IFNULL(E.PHOTO, 'NO') AS PHOTO FROM tblinventory A INNER JOIN ( SELECT MAX(TransactionDate) AS TDATE, PRODUCTCODE "
-						+ " FROM tblinventory GROUP BY PRODUCTCODE) G ON G.ProductCode = A.PRODUCTCODE INNER JOIN tblproduct E ON A.ProductCode = E.ProductCode "
+						+ " IF((((SUM(A.POUNIT)/E.UNITQUANTITY)) - (SUM(A.SOUNIT) - SUM(A.SORETURNUNIT)))<1, 0,(((SUM(A.POUNIT)/E.UNITQUANTITY)) - (SUM(A.SOUNIT) - SUM(A.SORETURNUNIT))))  AS AVAILABLESTOCKQTY, "
+						+ " IF((((SUM(A.POUNIT)/E.UNITQUANTITY) - SUM(A.PORETURNUNIT)) - (SUM(A.SOUNIT) - SUM(A.SORETURNUNIT)))<1, 0,(((SUM(A.POUNIT)/E.UNITQUANTITY) - SUM(A.PORETURNUNIT)) - (SUM(A.SOUNIT) - SUM(A.SORETURNUNIT))))  AS AVAILABLESTOCKQTY2, "
+						+ " IFNULL(E.PHOTO, 'NO') AS PHOTO, SUM(A.PORETURNUNIT) AS PORETURNUNIT, H.COMMENTS FROM tblinventory A INNER JOIN ( SELECT MAX(TransactionDate) AS TDATE, PRODUCTCODE "
+						+ " FROM tblinventory WHERE INVENTORYSOURCE = 'GR' GROUP BY PRODUCTCODE) G ON G.ProductCode = A.PRODUCTCODE INNER JOIN tblproduct E ON A.ProductCode = E.ProductCode "
 						+ " LEFT JOIN tblpurchaserequest F ON F.PURCHASEORDERCODE = A.SOURCECODE AND F.PRODUCTCODE = A.ProductCode "
-						+ " GROUP BY G.TDATE, A.STOCKLOCATION, A.PRODUCTCODE, E.PHOTO HAVING LENGTH(A.STOCKLOCATION) = 9 "
+						+ " LEFT JOIN (SELECT MAX(TransactionDate) AS TDATE, PRODUCTCODE, COMMENTS FROM tblinventory WHERE InventorySource = 'RTS' GROUP BY PRODUCTCODE, COMMENTS) H ON H.PRODUCTCODE = A.PRODUCTCODE "
+						+ " GROUP BY G.TDATE, A.STOCKLOCATION, A.PRODUCTCODE, E.PHOTO, H.COMMENTS HAVING LENGTH(A.STOCKLOCATION) = 9 "
 						+ " ORDER BY G.TDATE ");
 			}
 			
@@ -100,7 +101,10 @@ public class InventoryDaoImpl implements InventoryDao {
 					inventorysummaryvo.setBuyingPrice(HelperUtil.checkNullAmount(resultListRecord[7]));
 					inventorysummaryvo.setRrprice(HelperUtil.checkNullAmount(resultListRecord[8]));
 					inventorysummaryvo.setUnits(HelperUtil.checkNullNumbers(resultListRecord[9]));
-					inventorysummaryvo.setPhoto(HelperUtil.checkNullString(resultListRecord[10]));
+					inventorysummaryvo.setUnitsAll(HelperUtil.checkNullNumbers(resultListRecord[10]));
+					inventorysummaryvo.setPhoto(HelperUtil.checkNullString(resultListRecord[11]));
+					inventorysummaryvo.setReturnUnits(HelperUtil.checkNullNumbers(resultListRecord[12]));
+					inventorysummaryvo.setComments(HelperUtil.checkNullString(resultListRecord[13]));
 					searchInventoryList.add(inventorysummaryvo);
 				}
 			}
@@ -121,25 +125,66 @@ public class InventoryDaoImpl implements InventoryDao {
 		DateTime dateTimeKL = DateTime.now( DateTimeZone.forID("Asia/Kuala_Lumpur"));
 		String currdatenow = HelperUtil.checkNullTimeZone(dateTimeKL);
 		String actiontaken1 = null;
-		
+		Session session = sessionFactory.openSession();
 		try {
-			session = sessionFactory.openSession();
 			searchinventory = factoryInventoryEntityService.getEntityInventory(productcode, session);
 			if(searchinventory.size() != 0){
 				for (Inventory inv : searchinventory) {
-					
 					//insert audit trail
 					//TODO Please include the staffcode
 					actiontaken1 = "1. Update Stock Location from " + inv.getStockLocation() + " to " + location;
 					
 					BigInteger audittrailid = ResultGeneratorUtil.idGenerator("", "sq_audittrail_id", session);
 					AuditTrail audittrail = new AuditTrail(audittrailid, "CMS", "updateInventoryLocation", "-", productcode,
-							currdatenow, actiontaken1, "-");
+							currdatenow, actiontaken1, HelperUtil.getLoginusercode());
 					session.save(audittrail);
 					
 					inv.setStockLocation(location);
 					session.save(inv);
 				}
+				HibernateUtil.callCommitClose(session);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return searchinventory;
+	}
+	
+	@Override
+	public List<Inventory> addReturnUnits(String location, String productcode, String units, String comments) throws Exception {
+		
+		List<Inventory> searchinventory = null;
+		
+		DateTime dateTimeKL = DateTime.now( DateTimeZone.forID("Asia/Kuala_Lumpur"));
+		String currdatenow = HelperUtil.checkNullTimeZone(dateTimeKL);
+		String actiontaken1 = null;
+		String unitquantity = null;
+		String stockcode = null;
+		Session session = sessionFactory.openSession();
+		try {
+			searchinventory = factoryInventoryEntityService.getInventoryLocation(location, productcode, session);
+			if(searchinventory.size() != 0 && searchinventory !=null){
+				for(Inventory inv : searchinventory){
+					stockcode = inv.getStockCode();
+					unitquantity = inv.getUnitQuantity();
+					break;
+				}
+				
+				//insert audit trail
+				//TODO Please include the staffcode
+				actiontaken1 = "1. Add Return Stocks of " + units + " items to Supplier";
+				
+				BigInteger audittrailid = ResultGeneratorUtil.idGenerator("", "sq_audittrail_id", session);
+				AuditTrail audittrail = new AuditTrail(audittrailid, "CMS", "addReturnUnits", "-", productcode,
+						currdatenow, actiontaken1, HelperUtil.getLoginusercode());
+				session.save(audittrail);
+				
+				//TODO check here if we have already return items. if yes then deduct it to current return
+				BigInteger inventoryid = ResultGeneratorUtil.idGenerator("", "sq_inventory_id", session);
+				Inventory inventoryreturn = new Inventory(inventoryid, "-", productcode, "MW01", unitquantity, location, 
+					units, "RTS", "RTS", HelperUtil.getLoginusercode(), stockcode, "Items on Hand", comments); 
+				session.save(inventoryreturn);
+				
 				HibernateUtil.callCommitClose(session);
 			}
 		} catch (Exception e) {

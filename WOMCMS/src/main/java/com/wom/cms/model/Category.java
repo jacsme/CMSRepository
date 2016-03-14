@@ -12,7 +12,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name = "womdatabase.tblcategory")
+@Table(name = "WOMDBPR.tblcategory")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Category implements Serializable{
 

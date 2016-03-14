@@ -11,28 +11,25 @@ public class HibernateUtil {
 	 
 	public static Session callSession(SessionFactory sessionFactory){
 		session = sessionFactory.openSession();
-		//tx = session.getTransaction();
-		//session.beginTransaction();
-		
 		return session;
 	}
 	
 	public static void callCommit(Session session){
-		//tx = session.getTransaction();
-		//tx.commit();
 		session.flush();
 		session.clear();
+		session.close();
 	}
 	
 	public static void callClose(Session session){
 		session.flush();
 		session.clear();
-		//session.close();
+		session.close();
 	}
 	
 	public static void callCommitClose(Session session){
 		session.flush();
 		session.clear();
+		session.close();
 	}
 }
 

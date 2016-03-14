@@ -19,7 +19,6 @@ import com.wom.cms.model.Category;
 import com.wom.cms.model.Product;
 import com.wom.cms.services.ProductService;
 import com.wom.cms.vo.AddProductSupplierVO;
-import com.wom.cms.vo.POSupplierVO;
 import com.wom.cms.vo.ProductSupplierVO;
 
 @Controller
@@ -73,12 +72,7 @@ public class ProductController {
 		return "editproductsothers";
 	}
 	
-	@RequestMapping(value="/purchaseorders", method = RequestMethod.GET)
-	public String getPurchaseOrdersGET(ModelMap model) {
-		logger.info("Received request to show Purchase Orders GET");
-		model.addAttribute("message", "Welcome");
-		return "purchaseorders";
-	}
+	
 	
 	/** GET Request 
 	 * @throws JSONException **/
@@ -112,23 +106,6 @@ public class ProductController {
 			e.printStackTrace();
 		}
 		return searchPromoProductList;
-	}
-	
-	/** GET Request 
-	 * @throws JSONException **/
-	@RequestMapping(value = "/searchPurchaseOrder/{purchaseordercode:.+}/{suppliername:.+}/{dateissued:.+}", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody List<POSupplierVO> searchPurchaseOrderGET(@PathVariable("purchaseordercode") String purchaseordercode,
-			@PathVariable("suppliername") String suppliername, @PathVariable("dateissued") String dateissued) throws Exception{
-		
-		logger.info(" Request for searchPurchaseOrderGET() " + purchaseordercode + "/" + suppliername + "/" + dateissued);
-		
-		List<POSupplierVO> searchpurchaseorderlist = null;
-		try{
-			searchpurchaseorderlist = productService.searchPurchaseOrder(purchaseordercode, suppliername, dateissued);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return searchpurchaseorderlist;
 	}
 	
 	/** GET Request 

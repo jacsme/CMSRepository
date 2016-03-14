@@ -23,7 +23,7 @@ import org.joda.time.DateTimeZone;
 import com.wom.cms.util.HelperUtil;
 
 @Entity
-@Table(name = "womdatabase.tblpurchaseorder")
+@Table(name = "WOMDBPR.tblpurchaseorder")
 public class PurchaseOrder implements Serializable{
 
 	public PurchaseOrder(){}

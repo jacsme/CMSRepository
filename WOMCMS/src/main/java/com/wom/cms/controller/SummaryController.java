@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wom.cms.model.Inventory;
-import com.wom.cms.model.Product;
 import com.wom.cms.services.InventoryService;
 import com.wom.cms.vo.InventorySummaryVO;
 
@@ -32,6 +31,13 @@ public class SummaryController {
 		logger.info("Received request to show Inventory Summary");
 		model.addAttribute("message", "Inventory");
 		return "inventorysumry";
+	}
+	
+	@RequestMapping(value="/returnstocks", method = RequestMethod.GET)
+	public String getReturnStocks(ModelMap model) {
+		logger.info("Received request to show Return Inventory");
+		model.addAttribute("message", "Inventory");
+		return "returnproducts";
 	}
 	
 	@RequestMapping(value="/salessummary", method = RequestMethod.GET)
@@ -69,6 +75,25 @@ public class SummaryController {
 		List<Inventory> updatemessage = null;
 		try{
 			updatemessage = inventoryService.updateInventoryLocation(location, productcode);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return updatemessage;
+	}
+	
+	@RequestMapping(value = "/addReturnUnits/{location:.+}/{productcode:.+}/{units:.+}/{comments:.+}", method = RequestMethod.POST, produces = "application/json")
+	public @ResponseBody List<Inventory> addReturnUnitsPOST(
+			@PathVariable("location") String location,
+			@PathVariable("productcode") String productcode,
+			@PathVariable("units") String units,
+			@PathVariable("comments") String comments
+			) throws Exception {
+		
+		logger.info("/addReturnUnits/" + location + "/" + productcode + "/" + units + "/" + comments);
+		
+		List<Inventory> updatemessage = null;
+		try{
+			updatemessage = inventoryService.addReturnUnits(location, productcode, units, comments);
 		}catch(Exception e){
 			e.printStackTrace();
 		}

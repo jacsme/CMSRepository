@@ -8,7 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.wom.cms.dao.ProductDao;
 import com.wom.cms.model.Category;
 import com.wom.cms.model.Product;
-import com.wom.cms.vo.POSupplierVO;
 import com.wom.cms.vo.ProductSupplierVO;
 
 public class ProductServiceImpl implements ProductService{
@@ -33,12 +32,6 @@ public class ProductServiceImpl implements ProductService{
 			 String compareweight, String comparemass, String gst) throws Exception {
 		return productDao.updateproductmaindetails(productcode, brand, productname, categorycode, barcode, unitquantity, packquantity, retailprice, 
 				discount, packweight, packmass, compareweight, comparemass, gst);
-	}
-
-	@Override
-	public List<POSupplierVO> searchPurchaseOrder(String purchaseordercode, String suppliername, String dateissued)
-			throws Exception {
-		return productDao.searchPurchaseOrder(purchaseordercode, suppliername, dateissued);
 	}
 
 	@Override

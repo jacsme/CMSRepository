@@ -13,23 +13,23 @@ import com.wom.cms.crypt.EncryptionUtil;
 import com.wom.cms.factory.FactoryEntityService;
 import com.wom.cms.factory.FactoryEntityServiceImpl;
 import com.wom.cms.model.LoginUser;
+import com.wom.cms.util.HelperUtil;
 import com.wom.cms.util.HibernateUtil;
 @Transactional
 public class StaffDaoImpl implements StaffDao{
 	
 	@Resource(name="sessionFactory")
 	private SessionFactory sessionFactory;
-	Session session; 
 	
 	FactoryEntityService<LoginUser> factoryentityService = new FactoryEntityServiceImpl<LoginUser>();
 	
 	@Override
 	public String submitNewPassword(String userid, String password) throws Exception {
-		
+		Session session = sessionFactory.openSession();
 		String encryptedpwd = null;
 		String results = null;
 		try {
-			session = sessionFactory.openSession();
+			
 			LoginUser loginuser = factoryentityService.getEntity(MainEnum.LOGIN, userid, session);
 			
 			if (loginuser==null){
@@ -43,6 +43,7 @@ public class StaffDaoImpl implements StaffDao{
 			HibernateUtil.callCommitClose(session);
 		} catch (Exception e) {
 			results = e.getMessage();
+			HibernateUtil.callClose(session);
 		}
 		return results;
 	}
@@ -50,8 +51,8 @@ public class StaffDaoImpl implements StaffDao{
 	@Override
 	public String submitLogin(String userid, String password) throws Exception {
 		String results = null;
+		Session session = sessionFactory.openSession();
 		try {
-			session = sessionFactory.openSession();
 			LoginUser loginuser = factoryentityService.getEntity(MainEnum.LOGIN, userid, session);
 			
 			if (loginuser==null){
@@ -59,6 +60,7 @@ public class StaffDaoImpl implements StaffDao{
 			}else{
 				if(DecryptionUtil.decrypt(loginuser.getPassword()).equals(password)){
 					results = StatusCode.SUCCESSFUL_CODE;
+					HelperUtil.setLoginusercode(loginuser.getUserCode());
 				}else{
 					results = StatusCode.LOGIN_PASSWORD_ERROR_CODE;
 				}

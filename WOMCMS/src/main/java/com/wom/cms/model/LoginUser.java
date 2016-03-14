@@ -12,7 +12,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name = "womdatabase.tbllogin")
+@Table(name = "WOMDBPR.tbllogin")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class LoginUser implements Serializable {
 

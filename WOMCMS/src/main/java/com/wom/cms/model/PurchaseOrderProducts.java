@@ -18,7 +18,7 @@ import org.joda.time.DateTimeZone;
 import com.wom.cms.util.HelperUtil;
 
 @Entity
-@Table(name = "womdatabase.tblpurchaseorderproducts")
+@Table(name = "WOMDBPR.tblpurchaseorderproducts")
 public class PurchaseOrderProducts implements Serializable{
 	
 	public PurchaseOrderProducts(){}

@@ -75,17 +75,17 @@ public class SupplierController {
 		return newsupplier;
 	}
 	
-	@RequestMapping(value = "/getSupplierProductList/{suppliercode:.+}/{brandname:.+}/{photocode:.+}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/getSupplierProductList/{suppliercode:.+}/{brandname:.+}/{productcode:.+}", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<SupplierProductVO> getSupplierProductListGET(
 			@PathVariable("suppliercode") String suppliercode, 
 			@PathVariable("brandname") String brandname, 
-			@PathVariable("photocode") String photocode ) throws JSONException{
+			@PathVariable("productcode") String productcode ) throws JSONException{
 		logger.info(" Request for getSupplierProductListGET");
 		
 		List<SupplierProductVO> supplierproductlist =  null;
 		
 		try { 
-			supplierproductlist = supplierService.getSupplierProductList(suppliercode, photocode, brandname);
+			supplierproductlist = supplierService.getSupplierProductList(suppliercode, productcode, brandname);
 		} catch (Exception e) {
 			logger.error(" Error Message: " + e.getMessage());
 		}
@@ -93,7 +93,7 @@ public class SupplierController {
 	}
 	
 	@RequestMapping(value = "/updateSupplierProduct/{suppliercode:.+}/{productcode:.+}/{packunit:.+}/{packprice:.+}/{paymentterms:.+}", method = RequestMethod.POST, produces = "application/json")
-	public @ResponseBody List<ProductSupplier> updateproductmaindetailsPOST(
+	public @ResponseBody List<ProductSupplier> updateSupplierProductPOST(
 			@PathVariable("suppliercode") String suppliercode, 
 			@PathVariable("productcode") String productcode, 
 			@PathVariable("packunit") String packunit,
@@ -111,4 +111,23 @@ public class SupplierController {
 		return updatemessage;
 	}
 
+	@RequestMapping(value = "/addSupplierProduct/{suppliercode:.+}/{productcode:.+}/{packunit:.+}/{packprice:.+}/{paymentterms:.+}", method = RequestMethod.POST, produces = "application/json")
+	public @ResponseBody List<SupplierProductVO> addproductmaindetailsPOST(
+			@PathVariable("suppliercode") String suppliercode, 
+			@PathVariable("productcode") String productcode, 
+			@PathVariable("packunit") String packunit,
+			@PathVariable("packprice") String packprice, 
+			@PathVariable("paymentterms") String paymentterms) throws Exception {
+		
+		logger.info("Received request to update updateSupplierProduct POST");
+		
+		List<SupplierProductVO> supplierproductlist =  null;
+		try{
+			supplierService.addSupplierProduct(suppliercode, productcode, packunit, packprice, paymentterms);
+			supplierproductlist = supplierService.getSupplierProductList(suppliercode, "-", "-");
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return supplierproductlist;
+	}
 }

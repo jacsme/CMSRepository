@@ -21,8 +21,8 @@ public class SupplierServiceImpl implements SupplierService {
 	}
 
 	@Override
-	public List<SupplierProductVO> getSupplierProductList(String suppliercode, String photocode, String brandname) throws Exception {
-		return supplierDao.getSupplierProductList(suppliercode, photocode, brandname);
+	public List<SupplierProductVO> getSupplierProductList(String suppliercode, String productcode, String brandname) throws Exception {
+		return supplierDao.getSupplierProductList(suppliercode, productcode, brandname);
 	}
 	
 	@Override
@@ -37,6 +37,12 @@ public class SupplierServiceImpl implements SupplierService {
 	public List<ProductSupplier> updateSupplierProduct(String suppliercode, String productcode, String packunit,
 			String packprice, String paymentterms) throws Exception {
 		return supplierDao.updateSupplierProduct(suppliercode, productcode, packunit, packprice, paymentterms);
+	}
+
+	@Override
+	public void addSupplierProduct(String suppliercode, String productcode, String packunit,
+			String packprice, String paymentterms) throws Exception {
+		supplierDao.addSupplierProduct(suppliercode, productcode, packunit, packprice, paymentterms);
 	}
 
 	

@@ -29,20 +29,26 @@ public class ProdSupplierTransferServiceImpl implements ProdSupplierTransferServ
 		BigDecimal packprice = new BigDecimal(0.00);
 		BigDecimal buyingprice = new BigDecimal(0.00);
 		BigDecimal packunit = new BigDecimal(0.00);
+		BigDecimal unitquantity = new BigDecimal(0.00);
 		
 		for (Product prolist:productlist){
-			
+			unitquantity = new BigDecimal((String) HelperUtil.checkNullNumbers(prolist.getUnitQuantity()));
 			List<ProductSupplier> productsupplier = factoryProductSupplier.getEntityProductSupplier(HelperUtil.checkNullString(prolist.getProductCode()), session);
 			if(productsupplier.size() != 0){
 				for(ProductSupplier prosupp : productsupplier) {
 					pruductsuppliervo = new ProductSupplierVO();
-					
 					packprice = new BigDecimal((String) HelperUtil.checkNullAmount(prosupp.getPackPrice()));
 					packunit = new BigDecimal((String) HelperUtil.checkNullNumbers(prosupp.getPackUnit()));
 					
+					
 					if(packunit.compareTo(new BigDecimal(0.00)) == 1){
-						buyingprice = packprice.divide(packunit, 2, RoundingMode.HALF_UP);
-						pruductsuppliervo.setBuyingPrice(buyingprice.toString());
+						if(packunit.compareTo(unitquantity) == 0 || packunit.compareTo(unitquantity) == 1){
+							buyingprice = packprice.divide(packunit.divide(unitquantity), 2, RoundingMode.HALF_UP);
+							pruductsuppliervo.setBuyingPrice(buyingprice.toString());
+						}else if (packunit.compareTo(unitquantity) == -1){
+							buyingprice = packprice.multiply(unitquantity.divide(packunit, 2, RoundingMode.HALF_UP));
+							pruductsuppliervo.setBuyingPrice(buyingprice.toString());
+						}
 					}
 					
 					Supplier supplier = factorySupplier.getEntitySupplier(HelperUtil.checkNullString(prosupp.getSupplierCode()), session);

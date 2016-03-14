@@ -4,14 +4,12 @@ import java.io.File;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.joda.time.DateTime;
@@ -21,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.wom.cms.constant.MainEnum;
-import com.wom.cms.constant.StatusCode;
 import com.wom.cms.factory.FactoryEntityService;
 import com.wom.cms.factory.FactoryEntityServiceImpl;
 import com.wom.cms.model.AuditTrail;
@@ -33,7 +30,6 @@ import com.wom.cms.transferer.ProdSupplierTransferService;
 import com.wom.cms.util.HelperUtil;
 import com.wom.cms.util.HibernateUtil;
 import com.wom.cms.util.ResultGeneratorUtil;
-import com.wom.cms.vo.POSupplierVO;
 import com.wom.cms.vo.ProductSupplierVO;
 @Transactional
 public class ProductDaoImpl implements ProductDao{
@@ -43,7 +39,6 @@ public class ProductDaoImpl implements ProductDao{
 	
 	@Resource(name="sessionFactory")
 	private SessionFactory sessionFactory;
-	Session session; 
 	
 	static final Logger logger = Logger.getLogger(ProductDaoImpl.class);
 	
@@ -55,10 +50,9 @@ public class ProductDaoImpl implements ProductDao{
 	@Override
 	public List<Product> searchProductCode(String productcode, String brand, String categorycode) throws Exception {
 		
-		
 		List<Product> searchProductList = null;
+		Session session = sessionFactory.openSession();
 		try {
-			session = sessionFactory.openSession();
 			searchProductList = factoryentityService.getEntityProductList(MainEnum.PRODUCT, productcode, brand, categorycode, session);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -73,8 +67,8 @@ public class ProductDaoImpl implements ProductDao{
 		
 		List<Product> searchProductList = null;
 		List<ProductSupplierVO> productsuppliervo = null;
+		Session session = sessionFactory.openSession();
 		try {
-			session = sessionFactory.openSession();
 			searchProductList = factoryentityService.getEntityProductList(MainEnum.PRODUCT, productcode, brand, categorycode, session);
 			productsuppliervo = prodsuppliertransferService.generatePSTransfer(searchProductList, session);
 		} catch (Exception e) {
@@ -85,60 +79,7 @@ public class ProductDaoImpl implements ProductDao{
 		return productsuppliervo;
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public List<POSupplierVO> searchPurchaseOrder(String purchaseordercode, String suppliername, String dateissued) throws Exception {
-		
-		List<String> searchpurchaseorderList = null;
-		List<POSupplierVO> searchpurchaseordervo = new ArrayList<POSupplierVO>();
-		
-		StringBuffer stringcriteria = new StringBuffer();
-		Query criteria = null;
-		
-		try {
-			session = sessionFactory.openSession();
-			if (!purchaseordercode.equalsIgnoreCase("-")) {	stringcriteria.append(" AND A.PURCHASEORDERCODE =:purchaseordercode "); }
-			if (!suppliername.equalsIgnoreCase("-")) { stringcriteria.append(" AND B.SUPPLIERNAME like :suppliername ");}
-			if (!dateissued.equalsIgnoreCase("-")) { stringcriteria.append(" AND DATE(A.ISSUEDATE) =:dateissued ");}
-
-			if(stringcriteria.length() != 0){
-				criteria = session.createSQLQuery(" SELECT A.PURCHASEORDERCODE, A.SUPPLIERCODE, B.SUPPLIERNAME, "
-						+ " A.ISSUEDATE, A.DATERECEIVED FROM tblpurchaseorder A "
-						+ " INNER JOIN tblsupplier B ON A.SUPPLIERCODE = B.supplierCode WHERE STATUS = 'Emailed' "
-						+ stringcriteria.toString() + " ORDER BY A.PURCHASEORDERCODE ");
-			}else{
-				criteria = session.createSQLQuery(" SELECT A.PURCHASEORDERCODE, A.SUPPLIERCODE, B.SUPPLIERNAME, "
-						+ " A.ISSUEDATE, A.DATERECEIVED FROM tblpurchaseorder A "
-						+ " INNER JOIN tblsupplier B ON A.SUPPLIERCODE = B.supplierCode WHERE STATUS = 'Emailed' ORDER BY A.PURCHASEORDERCODE");
-			}
-			
-			if (!purchaseordercode.equalsIgnoreCase("-")) {	criteria.setString("purchaseordercode", purchaseordercode); }
-			if (!suppliername.equalsIgnoreCase("-")) {	criteria.setString("suppliername", "%" + suppliername + "%" ); }
-			if (!dateissued.equalsIgnoreCase("-")) {	criteria.setString("dateissued", dateissued); }
-				
-			searchpurchaseorderList = criteria.list();
-			
-			if(searchpurchaseorderList.size()!=0){
-				for (Iterator it = searchpurchaseorderList.iterator(); it.hasNext();){
-					Object[] resultListRecord = (Object[]) it.next();
-					
-					POSupplierVO posupplier = new POSupplierVO();
-					posupplier.setPurchaseOrderCode(HelperUtil.checkNullString(resultListRecord[0]));
-					posupplier.setSupplierCode(HelperUtil.checkNullString(resultListRecord[1]));
-					posupplier.setSupplierName(HelperUtil.checkNullString(resultListRecord[2]));
-					posupplier.setIssueDate(HelperUtil.checkNullString(resultListRecord[3]));
-					posupplier.setDateReceived(HelperUtil.checkNullString(resultListRecord[4]));
-					searchpurchaseordervo.add(posupplier);
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("StatusCode:" + StatusCode.EXCEPTION_ERROR_CODE + " Message:" + e.getMessage());
-		}finally{
-			HibernateUtil.callClose(session);
-		}
-		return searchpurchaseordervo;
-	}
+	
 	
 	@Override
 	public List<Product> updateproductmaindetails(String productcode, String brand, String productname,
@@ -147,8 +88,12 @@ public class ProductDaoImpl implements ProductDao{
 			 String compareweight, String comparemass, String gst) throws Exception {
 		
 		List<Product> searchProduct = null;
+		DateTime dateTimeKL = DateTime.now( DateTimeZone.forID("Asia/Kuala_Lumpur"));
+		String currdatenow = HelperUtil.checkNullTimeZone(dateTimeKL);
+		String actiontaken1 = null;
+		String actiontaken2 = null;
+		Session session = sessionFactory.openSession();
 		try {
-			session = sessionFactory.openSession();
 			searchProduct = factoryentityService.getEntityProductList(MainEnum.EDITPRODUCT, productcode, "", "",session);
 			if(searchProduct.size() != 0){
 				for (Product prod : searchProduct) {
@@ -168,6 +113,17 @@ public class ProductDaoImpl implements ProductDao{
 					prod.setGst(gst);
 					session.save(prod);
 				}
+				//Audit Trail
+				actiontaken1 = "1. Edit Product categorycode, brand, productname, photocode, unitquantity, packquantity, rrprice, "
+					+ " packweight, packmass, gst, compareweight, comparemass "; 
+				actiontaken2 = "2. Values " + categorycode + "," + brand + "," + productname + "," + barcode + "," + unitquantity
+						+ "," + packquantity + "," + retailprice + "," + packweight + "," + packmass + "," + gst + "," + compareweight + "," + comparemass ;
+
+				BigInteger audittrailid = ResultGeneratorUtil.idGenerator("", "sq_audittrail_id", session);
+				AuditTrail audittrail = new AuditTrail(audittrailid, "CMS", "updateproductmaindetails", "-", productcode,
+						currdatenow, actiontaken1 + actiontaken2, HelperUtil.getLoginusercode());
+				session.save(audittrail);
+				
 			}
 			HibernateUtil.callCommitClose(session);
 		} catch (Exception e) {
@@ -182,8 +138,12 @@ public class ProductDaoImpl implements ProductDao{
 			 String description, String keepfresh, String active) throws Exception {
 		
 		List<Product> searchProduct = null;
+		DateTime dateTimeKL = DateTime.now( DateTimeZone.forID("Asia/Kuala_Lumpur"));
+		String currdatenow = HelperUtil.checkNullTimeZone(dateTimeKL);
+		String actiontaken1 = null;
+		String actiontaken2 = null;
+		Session session = sessionFactory.openSession();
 		try {
-			session = sessionFactory.openSession();
 			searchProduct = factoryentityService.getEntityProductList(MainEnum.EDITPRODUCT, productcode, "", "",session);
 			if(searchProduct.size() != 0){
 				for (Product prod : searchProduct) {
@@ -202,6 +162,16 @@ public class ProductDaoImpl implements ProductDao{
 					
 					session.save(prod);
 				}
+				
+				//Audit Trail
+				actiontaken1 = "1. Edit Product categorycode, brand, productname, photocode, checkoutweight, inventorylevel, stockleveldays, keepfresh, description "; 
+				actiontaken2 = "2. Values " + categorycode + "," + brand + "," + productname + "," + barcode 
+						+ "," + checkoutweight + "," + inventorylevel + "," + stockleveldays + "," + keepfresh + "," + description; 
+				
+				BigInteger audittrailid = ResultGeneratorUtil.idGenerator("", "sq_audittrail_id", session);
+				AuditTrail audittrail = new AuditTrail(audittrailid, "CMS", "updateproductotherdetails", "-", productcode,
+						currdatenow, actiontaken1 + actiontaken2, HelperUtil.getLoginusercode());
+				session.save(audittrail);
 			}
 			HibernateUtil.callCommitClose(session);
 		} catch (Exception e) {
@@ -219,10 +189,9 @@ public class ProductDaoImpl implements ProductDao{
 		String currdatenow = HelperUtil.checkNullTimeZone(dateTimeKL);
 		String actiontaken1 = null;
 		String actiontaken2 = null;
+		Session session = sessionFactory.openSession();
 		try {
-			session = sessionFactory.openSession();
 			searchProduct = factoryentityService.getEntityProductList(MainEnum.EDITPRODUCT, productcode, "", "",session);
-			
 			if(searchProduct.size() != 0){
 				for (Product prod : searchProduct) {
 					//insert audit trail
@@ -232,7 +201,7 @@ public class ProductDaoImpl implements ProductDao{
 					
 					BigInteger audittrailid = ResultGeneratorUtil.idGenerator("", "sq_audittrail_id", session);
 					AuditTrail audittrail = new AuditTrail(audittrailid, "CMS", "updatepromotional1", "-", productcode,
-							currdatenow, actiontaken1 + " | " + actiontaken2, "-");
+							currdatenow, actiontaken1 + " | " + actiontaken2, HelperUtil.getLoginusercode());
 					session.save(audittrail);
 					
 					prod.setrRPrice(retailprice);
@@ -241,8 +210,6 @@ public class ProductDaoImpl implements ProductDao{
 					session.save(prod);
 				}
 			}
-			
-			
 			HibernateUtil.callCommitClose(session);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -255,7 +222,7 @@ public class ProductDaoImpl implements ProductDao{
 		
 		List<Category> categorylist = null;
 		try {
-			session = sessionFactory.openSession();
+			Session session = sessionFactory.openSession();
 			categorylist = factoryCategory.getCategoryEntityList(session);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -291,30 +258,35 @@ public class ProductDaoImpl implements ProductDao{
 		
 		String yearnow = HelperUtil.yearformat.format(new Date());
 		List<Product> saveProduct = new ArrayList<Product>();
+		
+		DateTime dateTimeKL = DateTime.now( DateTimeZone.forID("Asia/Kuala_Lumpur"));
+		String currdatenow = HelperUtil.checkNullTimeZone(dateTimeKL);
+		String actiontaken1 = null;
+		String actiontaken2 = null;
+		Session session = HibernateUtil.callSession(sessionFactory);
 		try {
-			session = HibernateUtil.callSession(sessionFactory);
-			
 			String productcode = ResultGeneratorUtil.codeGenerator("", "sq_product_code", "22", session);
 			String strproductcode = productcode + yearnow;
 			Product product = null;
 			
-			//Check if the productcode is already taken
-			Product productexist = factoryentityService.getEntity(MainEnum.PRODUCT, strproductcode, session);
-			if (productexist == null) {
-				product = new Product(strproductcode, storecode, categorycode, brand, productname, 
-						photocode, unitquantity, packquantity, rrprice, 
-						packweight, packmass, gst, compareweight, comparemass, 
-						checkoutweight, discount, inventorylevel, stockleveldays, 
-						keepfresh, description);
-			}else{
-				productcode = ResultGeneratorUtil.codeGenerator("", "sq_product_code", "22", session);
-				strproductcode = productcode + yearnow;
-				product = new Product(strproductcode, storecode, categorycode, brand, productname, 
-						photocode, unitquantity, packquantity, rrprice, 
-						packweight, packmass, gst, compareweight, comparemass, 
-						checkoutweight, discount, inventorylevel, stockleveldays, 
-						keepfresh, description);
-			}
+			//Audit Trail
+			actiontaken1 = "1. Add New Product productcode, categorycode, brand, productname, photocode, unitquantity, packquantity, rrprice, "
+				+ " packweight, packmass, gst, compareweight, comparemass, checkoutweight, discount, inventorylevel, stockleveldays, " 
+				+ " keepfresh, description "; 
+			actiontaken2 = "2. Values " + productcode + "," + categorycode + "," + brand + "," + productname + "," + photocode + "," + unitquantity
+					+ "," + packquantity + "," + rrprice + "," + packweight + "," + packmass + "," + gst + "," + compareweight + "," + comparemass
+					+ "," + checkoutweight + "," + discount + "," + inventorylevel + "," + stockleveldays + "," + keepfresh + "," + description; 
+			
+			BigInteger audittrailid = ResultGeneratorUtil.idGenerator("", "sq_audittrail_id", session);
+			AuditTrail audittrail = new AuditTrail(audittrailid, "CMS", "submitNewProduct", "-", productcode,
+					currdatenow, actiontaken1 + actiontaken2, HelperUtil.getLoginusercode());
+			session.save(audittrail);
+			
+			product = new Product(strproductcode, storecode, categorycode, brand, productname, 
+				photocode, unitquantity, packquantity, rrprice, 
+				packweight, packmass, gst, compareweight, comparemass, 
+				checkoutweight, discount, inventorylevel, stockleveldays, 
+				keepfresh, description);
 			session.save(product);
 			saveProduct.add(product);
 			
@@ -383,8 +355,8 @@ public class ProductDaoImpl implements ProductDao{
 		} catch (Exception e) {
 			e.printStackTrace();
 			
-		}finally{
-			HibernateUtil.callClose(session);
+		//}finally{
+		//	HibernateUtil.callClose(session);
 		}
 		return uploadedmessage;
 	}

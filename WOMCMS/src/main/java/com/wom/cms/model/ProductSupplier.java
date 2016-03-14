@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "womdatabase.tblproductsupplier")
+@Table(name = "WOMDBPR.tblproductsupplier")
 public class ProductSupplier implements Serializable{
 
 	private static final long serialVersionUID = -7860222614035058667L;

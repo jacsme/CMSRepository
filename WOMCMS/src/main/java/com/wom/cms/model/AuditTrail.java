@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @Entity
-@Table(name = "womdatabase.tblaudittrail")
+@Table(name = "WOMDBPR.tblaudittrail")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class AuditTrail {
 	public AuditTrail(){}

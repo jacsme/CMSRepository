@@ -14,7 +14,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 
 @Entity
-@Table(name = "womdatabase.tblstaff")
+@Table(name = "WOMDBPR.tblstaff")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Staff implements Serializable {
 

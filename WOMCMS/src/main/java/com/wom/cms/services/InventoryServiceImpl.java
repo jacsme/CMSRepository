@@ -25,4 +25,10 @@ public class InventoryServiceImpl implements InventoryService {
 	public List<Inventory> updateInventoryLocation(String location, String productcode) throws Exception{
 		return inventoryDao.updateInventoryLocation(location, productcode);
 	}
+
+	@Override
+	public List<Inventory> addReturnUnits(String location, String productcode, String units, String comments)
+			throws Exception {
+		return inventoryDao.addReturnUnits(location, productcode, units, comments);
+	}
 }

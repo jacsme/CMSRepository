@@ -357,7 +357,7 @@ public class QueriesString {
 			+ " FROM tblcustomer A LEFT JOIN tbllogin C ON C.USERCODE = A.CUSTOMERCODE ";
 	
 	public static final String contactusQuery = "SELECT A.STORECODE, A.STORENAME, A.ADDRESS, A.CONTACTNUMBER, A.WEBSITE "
-			+ " FROM womdatabase.tblstore A WHERE A.ACTIVE = 'YES'";
+			+ " FROM tblstore A WHERE A.ACTIVE = 'YES'";
 	public static final String rechargehistoryQuery = " SELECT A.CUSTOMERCODE, A.RECHARGEAMOUNT, A.WOMCOIN, A.PAYMENTTYPE, A.CARDNUMBER, A.RECHARGEDATE "
 			+ " FROM tblcustomerrecharge A ";
 	public static final String voucherredeemedQuery = " SELECT D.CUSTOMERCODE, D.VOUCHERNUMBER, D.AMOUNT, D.REDEEMEDDATE FROM (SELECT  A.CUSTOMERCODE, C.VOUCHERNUMBER, C.AMOUNT, B.RECHARGEDATE AS REDEEMEDDATE "

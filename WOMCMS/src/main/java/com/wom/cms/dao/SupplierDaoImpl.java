@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +31,6 @@ public class SupplierDaoImpl implements SupplierDao{
 
 	@Resource(name="sessionFactory")
 	private SessionFactory sessionFactory;
-	Session session; 
 	
 	@Autowired
 	ProdSupplierTransferService prodsuppliertransferService;
@@ -45,11 +45,12 @@ public class SupplierDaoImpl implements SupplierDao{
 	public List<SupplierVO> getSupplierList() throws Exception {
 		List<Supplier> supplierlist = null;
 		List<SupplierVO> suppliervo = null;
+		Session session = sessionFactory.openSession();
 		try {
-			session = sessionFactory.openSession();
-			supplierlist = session.createCriteria(Supplier.class).list();
+			supplierlist = session.createCriteria(Supplier.class)
+					.addOrder(Order.asc("supplierName"))
+					.list();
 			suppliervo = prodsuppliertransferService.generateSuppTransfer(supplierlist, session);
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("StatusCode:" + StatusCode.EXCEPTION_ERROR_CODE + " Message:" + e.getMessage());
@@ -61,16 +62,15 @@ public class SupplierDaoImpl implements SupplierDao{
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public List<SupplierProductVO> getSupplierProductList(String suppliercode, String photocode, String brandname) throws Exception {
+	public List<SupplierProductVO> getSupplierProductList(String suppliercode, String productcode, String brandname) throws Exception {
 		List<String> supplierproductlist = null;
 		List<SupplierProductVO> supplierproductlistvo = new ArrayList<SupplierProductVO>();
 		
 		StringBuffer stringcriteria = new StringBuffer();
 		Query criteria = null;
-		
+		Session session = sessionFactory.openSession();
 		try {
-			session = sessionFactory.openSession();
-			if (!photocode.equalsIgnoreCase("-")) {	stringcriteria.append(" AND D.PHOTOCODE =:photocode "); }
+			if (!productcode.equalsIgnoreCase("-")) {	stringcriteria.append(" AND D.PRODUCTCODE =:productcode "); }
 			if (!suppliercode.equalsIgnoreCase("-")) { stringcriteria.append(" AND A.SUPPLIERCODE =:suppliercode ");}
 			if (!brandname.equalsIgnoreCase("-")) { stringcriteria.append(" AND D.BRAND =:brandname ");}
 
@@ -83,10 +83,10 @@ public class SupplierDaoImpl implements SupplierDao{
 						+ " INNER JOIN tblproductsupplier C ON C.SUPPLIERCODE=A.SUPPLIERCODE "
 						+ " INNER JOIN tblproduct D ON D.PRODUCTCODE = C.PRODUCTCODE"
 						+ " WHERE A.ACTIVE = 'YES' "
-						+ stringcriteria.toString() + " ORDER BY D.PRODUCTCODE ");
+						+ stringcriteria.toString() + " ORDER BY D.BRAND, D.PRODUCTNAME ASC ");
 			}
 			
-			if (!photocode.equalsIgnoreCase("-")) {	criteria.setString("photocode", photocode); }
+			if (!productcode.equalsIgnoreCase("-")) {	criteria.setString("productcode", productcode); }
 			if (!suppliercode.equalsIgnoreCase("-")) {	criteria.setString("suppliercode", suppliercode); }
 			if (!brandname.equalsIgnoreCase("-")) {	criteria.setString("brandname", brandname); }
 				
@@ -127,8 +127,8 @@ public class SupplierDaoImpl implements SupplierDao{
 			String contactperson, String gstid, String contactpersonphone) throws Exception {
 		
 		List<Supplier> savesupplier = new ArrayList<Supplier>();
+		Session session = sessionFactory.openSession();
 		try {
-			session = sessionFactory.openSession();
 			String suppliercode = ResultGeneratorUtil.codeGenerator("", "sq_supplier_code", "SU22", session);
 			BigInteger supplierid = ResultGeneratorUtil.idGenerator("", "sq_supplier_id", session);
 			Supplier supplier = new Supplier(supplierid, suppliercode, suppliername, address, phone, fax, website, 
@@ -147,8 +147,8 @@ public class SupplierDaoImpl implements SupplierDao{
 	public List<ProductSupplier> updateSupplierProduct(String suppliercode, String productcode, String packunit, String packprice,
 			 String paymentterms) throws Exception {
 		List<ProductSupplier> supplierproduct = null;
+		Session session = sessionFactory.openSession();
 		try {
-			session = sessionFactory.openSession();
 			supplierproduct = factoryProductSupplier.getEntityProductSupplier(suppliercode, productcode, session);
 			if(supplierproduct.size() != 0){
 				for (ProductSupplier suppprod : supplierproduct) {
@@ -165,6 +165,22 @@ public class SupplierDaoImpl implements SupplierDao{
 			logger.error("StatusCode:" + StatusCode.EXCEPTION_ERROR_CODE + " Message:" + e.getMessage());
 		}
 		return supplierproduct;
+	}
+	
+	@Override
+	public void addSupplierProduct(String suppliercode, String productcode, String packunit, String packprice,
+			 String paymentterms) throws Exception {
+		Session session = sessionFactory.openSession();
+		try {
+			BigInteger productsupplierid = ResultGeneratorUtil.idGenerator("", "sq_productsupplier_id", session);
+			ProductSupplier productsupplier = new ProductSupplier(productsupplierid, productcode, suppliercode, "1", packunit, packprice, paymentterms);
+			session.save(productsupplier);
+			HibernateUtil.callCommitClose(session);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("StatusCode:" + StatusCode.EXCEPTION_ERROR_CODE + " Message:" + e.getMessage());
+		}
 	}
 	
 }

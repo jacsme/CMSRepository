@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "womdatabase.tblsupplier")
+@Table(name = "WOMDBPR.tblsupplier")
 public class Supplier implements Serializable{
 	public Supplier(){}
 	public Supplier(BigInteger id, String suppliercode, String suppliername, String address, String phone, String fax, String website, 

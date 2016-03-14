@@ -1,28 +1,56 @@
 package com.wom.cms.model;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.GenericGenerator;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+
+import com.wom.cms.util.HelperUtil;
 
 @Entity
-@Table(name = "womdatabase.tblinventory")
+@Table(name = "WOMDBPR.tblinventory")
 public class Inventory implements Serializable{
 
 	public Inventory(){}
 	
+	public Inventory(BigInteger id, String sourcecode, String productcode, String storecode, String unitquantity, String stocklocation, 
+			String unit, String unitfrom, String source, String staffcode, String stockcode, String status, String comments){
+		this.Id = id;
+		this.sourceCode = sourcecode;
+		this.productCode = productcode;
+		this.storeCode = storecode;
+		this.stockLocation = stocklocation;
+		this.inventorySource = source;
+		this.unitQuantity = unitquantity;
+		
+		DateTime dateTimeKL = DateTime.now( DateTimeZone.forID("Asia/Kuala_Lumpur"));
+		String currdatenow = HelperUtil.checkNullTimeZone(dateTimeKL);
+		
+		this.transactionDate = currdatenow;
+		this.staffCode = staffcode;
+		this.stockCode = stockcode;
+		this.status = status;
+		this.comments = comments;
+		
+		if (unitfrom.equalsIgnoreCase("GR")){ this.poUnit = unit; this.soUnit = "0"; this.poReturnUnit = "0"; this.soReturnUnit = "0";}
+		if (unitfrom.equalsIgnoreCase("STI")){ this.poUnit = unit; this.soUnit = "0"; this.poReturnUnit = "0"; this.soReturnUnit = "0";}
+		if (unitfrom.equalsIgnoreCase("SO")){ this.poUnit = "0"; this.soUnit = unit; this.poReturnUnit = "0"; this.soReturnUnit = "0";}
+		if (unitfrom.equalsIgnoreCase("RTS")){ this.poUnit = "0"; this.soUnit = "0"; this.poReturnUnit = unit; this.soReturnUnit = "0";}
+		if (unitfrom.equalsIgnoreCase("RFC")){ this.poUnit = "0"; this.soUnit = "0"; this.poReturnUnit = "0"; this.soReturnUnit = unit;}
+	}
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GenericGenerator(name = "idgen", strategy = "increment")
-	@GeneratedValue(generator="idgen")
+	//@GenericGenerator(name = "idgen", strategy = "increment")
+	//@GeneratedValue(generator="idgen")
 	@Column(name = "Id")
-	private long Id;
+	private BigInteger Id;
 	
 	@Column(name = "SourceCode")
 	private String sourceCode;
@@ -66,6 +94,9 @@ public class Inventory implements Serializable{
 	@Column(name = "StockCode")
 	private String stockCode;
 	
+	@Column(name = "SupplierCode")
+	private String supplierCode;
+	
 	@Column(name = "Status")
 	private String status;
 	
@@ -78,12 +109,15 @@ public class Inventory implements Serializable{
 	@Column(name = "Comments")
 	private String comments;
 	
-	public long getId() {
+	
+	public BigInteger getId() {
 		return Id;
 	}
-	public void setId(long id) {
+
+	public void setId(BigInteger id) {
 		Id = id;
 	}
+
 	public String getSourceCode() {
 		return sourceCode;
 	}
@@ -167,6 +201,13 @@ public class Inventory implements Serializable{
 	}
 	public void setStockCode(String stockCode) {
 		this.stockCode = stockCode;
+	}
+	
+	public String getSupplierCode() {
+		return supplierCode;
+	}
+	public void setSupplierCode(String supplierCode) {
+		this.supplierCode = supplierCode;
 	}
 	public String getStatus() {
 		return status;

@@ -31,32 +31,14 @@ public class HelperUtil {
 	
 	public static final String PRODUCT_IMAGE_LOCATIONTMP = ResourceUtil.getMessage("server.productimagestmp.location");
 	
-	public static String purchaseapprovalcode;
-	public static String officeaddress;
-	public static String deliveryaddress;
+	public static String loginusercode;
 	
-		public static synchronized String getPurchaseapprovalcode() {
-		return purchaseapprovalcode;
+	public static synchronized String getLoginusercode() {
+		return loginusercode;
 	}
 
-	public static void setPurchaseapprovalcode(String purchaseapprovalcode) {
-		HelperUtil.purchaseapprovalcode = purchaseapprovalcode;
-	}
-
-	public static String getOfficeaddress() {
-		return officeaddress;
-	}
-
-	public static void setOfficeaddress(String officeaddress) {
-		HelperUtil.officeaddress = officeaddress;
-	}
-
-	public static String getDeliveryaddress() {
-		return deliveryaddress;
-	}
-
-	public static void setDeliveryaddress(String deliveryaddress) {
-		HelperUtil.deliveryaddress = deliveryaddress;
+	public static void setLoginusercode(String loginusercode) {
+		HelperUtil.loginusercode = loginusercode;
 	}
 
 	public static String checkNullNumbers(Object objvalue){
